@@ -1,10 +1,10 @@
 <?php
-session_start();
+// logout.php
+// Encerra sessão e redireciona para a home
 
-// Destrói todos os dados da sessão
+session_start();
+$_SESSION = [];
 session_unset();
 session_destroy();
-
-// Redireciona para a página inicial
-header('Location: ../index.php');
+header('Location: /index.php');
 exit;
