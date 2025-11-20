@@ -1,159 +1,145 @@
 <?php
-// =========================================
-// painelAdmin.php
-// Painel administrativo para gerenciar posts e ver estatísticas.
-// =========================================
+session_start();
+require '../includes/header.php';
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-date_default_timezone_set('Africa/Maputo');
-
-// Verifica login e papel
-$usuarioLogado = $_SESSION['usuario'] ?? null;
-if (!$usuarioLogado) {
-    header('Location: /backend/login.php');
-    exit;
-}
-if (($usuarioLogado['papel'] ?? 'usuario') !== 'admin') {
-    echo 'Acesso negado. Esta área é restrita a administradores.';
+// Proteção correta - só admin pode acessar
+if (!isset($_SESSION['papel']) || $_SESSION['papel'] !== 'admin') {
+    header('Location: ../index.php');
     exit;
 }
 
-// Carrega usuários
-$arquivoUsuarios = __DIR__ . '/../data/usuarios.json';
-$usuarios = file_exists($arquivoUsuarios) ? json_decode(file_get_contents($arquivoUsuarios), true) : [];
+// Carrega os dados
+$posts = json_decode(file_get_contents('../data/posts.json'), true) ?? [];
+$usuarios = json_decode(file_get_contents('../data/usuarios.json'), true) ?? [];
 
-// Carrega posts
-$arquivoPosts = __DIR__ . '/../data/posts.json';
-$posts = file_exists($arquivoPosts) ? json_decode(file_get_contents($arquivoPosts), true) : [];
-
-// Estatísticas
-$arquivoEstat = __DIR__ . '/../data/estatisticas.json';
-$estatisticas = file_exists($arquivoEstat) ? json_decode(file_get_contents($arquivoEstat), true) : ['gostos'=>[], 'visitas'=>[], 'compartilhamentos'=>[]];
-
-// Totais
 $totalPosts = count($posts);
 $totalUsuarios = count($usuarios);
-
-// Média likes
-$somaLikes = 0;
-foreach ($posts as $p) $somaLikes += (int)($p['gostos'] ?? 0);
-$mediaLikes = $totalPosts ? round($somaLikes / $totalPosts, 2) : 0;
-
-// Inclui header compartilhado
-require __DIR__ . '/../includes/header.php';
 ?>
 
-<main class="conteudo conteudo-limitado">
-<section class="cabecalho-pagina-admin">
-    <div>
-        <h1>Dashboard Admin</h1>
-        <p class="texto-suave">Gerencie posts, usuários e acompanhe estatísticas do blog.</p>
+<main class="container">
+    <h2>Painel Administrativo</h2>
+
+    <div class="cards-stats">
+        <div class="card">
+            <strong><?php echo $totalPosts; ?></strong>
+            <span>Posts Publicados</span>
+        </div>
+        <div class="card">
+            <strong><?php echo $totalUsuarios; ?></strong>
+            <span>Usuários Registrados</span>
+        </div>
     </div>
-    <div class="acoes-topo-admin">
-        <a class="botao-primario" href="/backend/adicionar_post.php">Adicionar post</a>
-        <a class="btn secundario" href="/index.php">Ver site</a>
+
+    <div class="add-post-link">
+        <a href="adicionar_post.php" class="btn btn-grande">+ Adicionar Novo Post</a>
     </div>
-</section>
 
-<section class="cards-dashboard">
-    <article class="card-stat">
-        <h3>Total de Posts</h3>
-        <p class="numero-stat"><?php echo $totalPosts; ?></p>
-        <span class="legenda-stat">Conteúdos publicados</span>
-    </article>
-
-    <article class="card-stat">
-        <h3>Total de Usuários</h3>
-        <p class="numero-stat"><?php echo $totalUsuarios; ?></p>
-        <span class="legenda-stat">Contas registradas</span>
-    </article>
-
-    <article class="card-stat">
-        <h3>Média de Likes</h3>
-        <p class="numero-stat"><?php echo $mediaLikes; ?></p>
-        <span class="legenda-stat">Por post publicado</span>
-    </article>
-</section>
-
-<section class="secao-tabela-posts">
-    <header class="cabecalho-secao">
-        <h2>Gerir posts</h2>
-        <p class="texto-suave">Edite ou apague posts existentes. Use o botão "Adicionar post" para criar novos conteúdos.</p>
-    </header>
-
-    <div class="tabela-container">
-        <table class="tabela-gerir">
-            <thead>
-            <tr>
-                <th>#ID</th>
-                <th>Imagem</th>
-                <th>Título</th>
-                <th>Descrição curta</th>
-                <th>Gostos</th>
-                <th>Visitas</th>
-                <th>Ações</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php if (empty($posts)): ?>
-                <tr><td colspan="7" style="text-align:center;">Nenhum post cadastrado ainda.</td></tr>
-            <?php else: ?>
-                <?php foreach ($posts as $p): ?>
+    <h3>Gerir Posts</h3>
+    <?php if (empty($posts)): ?>
+        <p>Nenhum post publicado ainda.</p>
+    <?php else: ?>
+        <div class="tabela-responsiva">
+            <table>
+                <thead>
                     <tr>
-                        <td><?php echo (int)$p['id']; ?></td>
-                        <td class="coluna-imagem">
-                            <?php if (!empty($p['imagem'])): ?>
-                                <img 
-                                    src="<?php echo htmlspecialchars('/' . ltrim($p['imagem'], '/')); ?>" 
-                                    alt="Imagem do post" 
-                                    class="miniatura-post">
-                            <?php else: ?>
-                                <span class="texto-suave">Sem imagem</span>
-                            <?php endif; ?>
-                        </td>
-                        <td><?php echo htmlspecialchars($p['titulo']); ?></td>
-                        <td><?php echo htmlspecialchars($p['descricao_curta']); ?></td>
-                        <td><?php echo (int)($p['gostos'] ?? 0); ?></td>
-                        <td><?php echo (int)($p['visitas'] ?? 0); ?></td>
-                        <td class="coluna-acoes">
-                            <a class="btn-acoes editar" href="/backend/editar_post.php?id=<?php echo (int)$p['id']; ?>">Editar</a>
-                            <a class="btn-acoes apagar" href="/backend/apagar_post.php?id=<?php echo (int)$p['id']; ?>" onclick="return confirm('Apagar post #<?php echo (int)$p['id']; ?>?');">Apagar</a>
+                        <th>ID</th>
+                        <th>Imagem</th>
+                        <th>Título</th>
+                        <th>Descrição Curta</th>
+                        <th>Data</th>
+                        <th>Likes</th>
+                        <th>Visitas</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($posts as $post): 
+                        $visitas = json_decode(file_get_contents('../data/estatisticas.json'), true)['visitas'][$post['id']] ?? 0;
+                    ?>
+                    <tr>
+                        <td><?php echo $post['id']; ?></td>
+                        <td><img src="<?php echo $post['imagem']; ?>" alt="Imagem do Post"></td>
+                        <td><strong><?php echo htmlspecialchars($post['titulo']); ?></strong></td>
+                        <td><?php echo htmlspecialchars(mb_substr($post['descricao_curta'], 0, 80)) . '...'; ?></td>
+                        <td><?php echo date('d/m/Y H:i', strtotime($post['data'])); ?></td>
+                        <td><?php echo $post['gostos']; ?></td>
+                        <td><?php echo $visitas; ?></td>
+                        <td class="acoes">
+                            <a href="editar_post.php?id=<?php echo $post['id']; ?>" class="btn-pequeno">Editar</a>
+                            <a href="apagar_post.php?id=<?php echo $post['id']; ?>" 
+                               class="btn-pequeno btn-vermelho"
+                               onclick="return confirm('Tens certeza que queres apagar este post?')">Apagar</a>
                         </td>
                     </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
-            </tbody>
-        </table>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+
+    <?php if (!empty($posts)): ?>
+    <div class="graficos-admin">
+        <div class="grafico-box">
+            <h3>Likes por Artigo</h3>
+            <canvas id="graficoLikes"></canvas>
+        </div>
     </div>
-</section>
+    <?php endif; ?>
 </main>
 
-<style>
-/* ========================== */
-/* Ajuste das miniaturas de posts */
-.miniatura-post {
-    width: 80px;       /* largura fixa */
-    height: 50px;      /* altura fixa */
-    object-fit: cover; /* mantém proporção, corta se necessário */
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-.coluna-imagem {
-    text-align: center;
-    width: 100px;
-}
-.coluna-acoes a {
-    margin-right: 4px;
-    padding: 4px 6px;
-    font-size: 0.85rem;
-    border-radius: 4px;
-    text-decoration: none;
-}
-.btn-acoes.editar { background-color: #4CAF50; color: #fff; }
-.btn-acoes.apagar { background-color: #f44336; color: #fff; }
-</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    <?php if (!empty($posts)): ?>
+    const ctx = document.getElementById('graficoLikes').getContext('2d');
 
-<?php require __DIR__ . '/../includes/footer.php'; ?>
+    const titulos = <?php 
+        $t = array_column($posts, 'titulo');
+        foreach($t as &$titulo) {
+            $titulo = strlen($titulo) > 25 ? substr($titulo, 0, 25) . '...' : $titulo;
+        }
+        echo json_encode($t);
+    ?>;
+
+    const likes = <?php echo json_encode(array_column($posts, 'gostos')); ?>;
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: titulos,
+            datasets: [{
+                label: 'Likes',
+                data: likes,
+                backgroundColor: '#e74c3c',
+                borderColor: '#c0392b',
+                borderWidth: 1,
+                borderRadius: 8,
+                borderSkipped: false,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            const titulosCompletos = <?php echo json_encode(array_column($posts, 'titulo')); ?>;
+                            return titulosCompletos[context[0].dataIndex];
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+    <?php endif; ?>
+</script>
+
+<?php require '../includes/footer.php'; ?>

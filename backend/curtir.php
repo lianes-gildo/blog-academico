@@ -1,70 +1,52 @@
 <?php
-// curtir.php
-// Endpoint AJAX para curtir / descurtir um post.
-// Recebe JSON POST: { "id": <postId> }
-// Retorna JSON: { sucesso: bool, gostos: int, atedeu_like: bool, mensagem?: string }
-//
-// Regras:
-// - Usuário precisa estar logado para curtir.
-// - Cada usuário só pode curtir uma vez por post (armazenado em data/estatisticas.json -> gostos).
-// - Clique alterna entre like/unlike.
-
 session_start();
 header('Content-Type: application/json');
-date_default_timezone_set('Africa/Maputo');
 
-$input = json_decode(file_get_contents('php://input'), true);
-$postId = isset($input['id']) ? (int)$input['id'] : 0;
-
-if (!$postId) {
-    echo json_encode(['sucesso'=>false,'mensagem'=>'Post inválido.']);
-    exit;
-}
 if (!isset($_SESSION['usuario_id'])) {
-    echo json_encode(['sucesso'=>false,'mensagem'=>'Você precisa estar logado para curtir.']);
+    echo json_encode(['sucesso' => false]);
     exit;
 }
 
+$postId = (int)$_POST['post_id'];
 $usuarioId = $_SESSION['usuario_id'];
-$arquivoPosts = __DIR__ . '/../data/posts.json';
-$arquivoEstat = __DIR__ . '/../data/estatisticas.json';
 
-$posts = json_decode(file_get_contents($arquivoPosts), true) ?: [];
-$estat = json_decode(file_get_contents($arquivoEstat), true) ?: ['gostos'=>[],'visitas'=>[],'compartilhamentos'=>[]];
+$estatisticas = json_decode(file_get_contents('../data/estatisticas.json'), true);
+$posts = json_decode(file_get_contents('../data/posts.json'), true);
 
-// localizar post e índice
-$indice = null;
-foreach ($posts as $k => $p) {
-    if ($p['id'] == $postId) { $indice = $k; break; }
+// Encontra o post para atualizar gostos no posts.json
+$indicePost = null;
+foreach ($posts as $i => $p) {
+    if ($p['id'] == $postId) {
+        $indicePost = $i;
+        break;
+    }
 }
-if ($indice === null) {
-    echo json_encode(['sucesso'=>false,'mensagem'=>'Post não encontrado.']);
+
+if ($indicePost === null) {
+    echo json_encode(['sucesso' => false]);
     exit;
 }
 
-// inicializar array de gostos para esse post
-if (!isset($estat['gostos'][$postId])) $estat['gostos'][$postId] = [];
+// Lista de quem curtiu
+$gostasLista = $estatisticas['gostos'][$postId] ?? [];
 
-// checar se já deu like
-$jaDeu = in_array($usuarioId, $estat['gostos'][$postId]);
+$jaCurtiu = in_array($usuarioId, $gostasLista);
 
-if ($jaDeu) {
-    // remover like (unlike)
-    $estat['gostos'][$postId] = array_values(array_filter($estat['gostos'][$postId], function($id){ global $usuarioId; return $id != $usuarioId; }));
-    // decrementar contador no post (proteção para não negativo)
-    $posts[$indice]['gostos'] = max(0, (int)$posts[$indice]['gostos'] - 1);
-    $atedeu_like = false;
+if ($jaCurtiu) {
+    // Unlike
+    $gostasLista = array_diff($gostasLista, [$usuarioId]);
+    $posts[$indicePost]['gostos']--;
 } else {
-    // adicionar like
-    $estat['gostos'][$postId][] = $usuarioId;
-    $posts[$indice]['gostos'] = (int)$posts[$indice]['gostos'] + 1;
-    $atedeu_like = true;
+    // Like
+    $gostasLista[] = $usuarioId;
+    $posts[$indicePost]['gostos']++;
 }
 
-// salvar arquivos
-file_put_contents($arquivoPosts, json_encode($posts, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-file_put_contents($arquivoEstat, json_encode($estat, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+$estatisticas['gostos'][$postId] = array_values($gostasLista); // reindex
+file_put_contents('../data/estatisticas.json', json_encode($estatisticas, JSON_PRETTY_PRINT));
+file_put_contents('../data/posts.json', json_encode($posts, JSON_PRETTY_PRINT));
 
-// responder com novo número de gostos
-echo json_encode(['sucesso'=>true,'gostos'=>(int)$posts[$indice]['gostos'],'atedeu_like'=>$atedeu_like]);
-exit;
+echo json_encode([
+    'sucesso' => true,
+    'total' => $posts[$indicePost]['gostos']
+]);
