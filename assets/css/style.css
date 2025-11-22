@@ -1,0 +1,961 @@
+/* ========================================
+   SEÇÃO 1: RESET E BASE GLOBAL
+   ======================================== */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f4f6f9;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-weight: 400;
+}
+
+/* ========================================
+   SEÇÃO 2: TIPOGRAFIA E TEXTOS
+   ======================================== */
+h1, h2, h3, h4, h5, h6 {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+h1 { font-size: 3rem; }
+h2 { font-size: 2.5rem; }
+h3 { font-size: 2rem; }
+p { font-size: 1rem; color: #666; margin-bottom: 20px; }
+small { font-size: 0.85rem; color: #888; }
+
+/* ========================================
+   SEÇÃO 3: LINKS E BOTÕES
+   ======================================== */
+a {
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+a:hover {
+    color: #2980b9;
+    transform: translateY(-2px);
+}
+
+button, .btn {
+    background: #3498db;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(52,152,219,0.3);
+}
+
+button:hover, .btn:hover {
+    background: #2980b9;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(52,152,219,0.4);
+}
+
+/* Botão vermelho para apagar */
+.btn-vermelho, button[style*="background:#e74c3c"] {
+    background: #e74c3c !important;
+}
+
+.btn-vermelho:hover {
+    background: #c0392b !important;
+}
+
+/* Botão grande para adicionar post */
+.btn-grande {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+}
+
+/* Botão pequeno para ações na tabela */
+.btn-pequeno {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+/* ========================================
+   SEÇÃO 4: CONTAINER E LAYOUT PRINCIPAL
+   ======================================== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+}
+
+/* Padding para conteúdo principal (para evitar overlap com header fixed) */
+.principal {
+    padding-top: 100px;
+    padding-bottom: 60px;
+}
+
+/* ========================================
+   SEÇÃO 5: CABEÇALHO (HEADER)
+   ======================================== */
+.cabecalho {
+    background: #2c3e50;
+    color: white;
+    padding: 1rem 0;
+    position: relative;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.cabecalho .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.logo a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.logo a:hover {
+    color: #3498db;
+}
+
+.menu {
+    display: flex;
+    gap: 20px;
+}
+
+.menu a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.menu a:hover {
+    color: #3498db;
+}
+
+.usuario-area .btn-entrar, .usuario-area .btn-registrar {
+    background: #3498db;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-left: 10px;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.usuario-area .btn-entrar:hover, .usuario-area .btn-registrar:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.3s ease;
+}
+
+.dropbtn:hover {
+    color: #3498db;
+}
+
+.img-perfil-pequena {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 8px;
+    vertical-align: middle;
+    border: 2px solid #3498db;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.dropdown-conteudo {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: #34495e;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.dropdown-conteudo a {
+    color: white;
+    padding: 12px 16px;
+    display: block;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.dropdown-conteudo a:hover {
+    background: #2c3e50;
+}
+
+.dropdown:hover .dropdown-conteudo {
+    display: block;
+}
+
+/* ========================================
+   SEÇÃO 6: TITULOS E SEÇÕES
+   ======================================== */
+.titulo-secao {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2rem;
+    color: #2c3e50;
+    font-weight: 700;
+    position: relative;
+}
+
+.titulo-secao::after {
+    content: '';
+    width: 80px;
+    height: 4px;
+    background: #3498db;
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+/* ========================================
+   SEÇÃO 7: GRID DE POSTS (HOME)
+   ======================================== */
+.grid-posts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+
+}
+
+
+
+.card-post {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.card-post:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.card-post img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card-post:hover img {
+    transform: scale(1.05);
+}
+
+.conteudo-card {
+    padding: 20px;
+}
+
+.conteudo-card h3 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.descricao-curta {
+    color: #666;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.info-post {
+    font-size: 0.9rem;
+    color: #888;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.estatisticas {
+    margin: 15px 0;
+    font-weight: 600;
+    color: #444;
+}
+
+.btn-ler-mais {
+    background: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.btn-ler-mais:hover {
+    background: #2980b9;
+}
+
+/* ========================================
+   SEÇÃO 8: PÁGINA DE ARTIGO
+   ======================================== */
+.artigo-detalhe img.img-artigo {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin: 20px 0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.acoes-artigo {
+    margin: 30px 0;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.btn-gostar {
+    background: #eee;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.btn-gostar.gostou {
+    background: #e74c3c;
+    color: white;
+}
+
+.comentarios {
+    margin-top: 50px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.comentario {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border-left: 4px solid #3498db;
+}
+
+.adicionar-comentario textarea {
+    width: 100%;
+    height: 100px;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    resize: vertical;
+    transition: border 0.3s ease;
+}
+
+.adicionar-comentario textarea:focus {
+    border: 1px solid #3498db;
+}
+
+/* ========================================
+   SEÇÃO 9: FORMULÁRIOS E INPUTS
+   ======================================== */
+input[type="text"], input[type="email"], input[type="password"], textarea, input[type="file"] {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 1rem;
+    background: #f8f9fa;
+    transition: border 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus {
+    border: 2px solid #3498db;
+    background: white;
+}
+
+label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Preview de imagem em adicionar/editar post */
+#preview {
+    max-width: 300px;
+    margin-top: 10px;
+    display: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* ========================================
+   SEÇÃO 10: PAINEL ADMIN
+   ======================================== */
+.cards-stats {
+    display: flex;
+    gap: 25px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    flex: 1;
+    min-width: 200px;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card strong {
+    font-size: 3rem;
+    display: block;
+    color: #3498db;
+}
+
+.card span {
+    font-size: 1rem;
+    color: #666;
+}
+
+.tabela-responsiva {
+    overflow-x: auto;
+    margin: 40px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+th {
+    background: #2c3e50;
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-size: 1rem;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+    background: #f8f9fa;
+}
+
+.acoes {
+    display: flex;
+    gap: 10px;
+}
+
+/* Gráficos */
+.graficos-admin {
+    margin-top: 60px;
+}
+
+.grafico-box {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* ========================================
+   SEÇÃO 11: RODAPÉ
+   ======================================== */
+.rodape {
+    background: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 30px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: auto;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* ========================================
+   SEÇÃO 13: ANIMAÇÕES E TRANSITIONS ADICIONAIS
+   ======================================== */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse {
+    animation: pulse 1s infinite;
+}
+
+/* ========================================
+   SEÇÃO 14: ESTILOS ADICIONAIS PARA PERFIS E IMAGENS
+   ======================================== */
+.perfil-imagem {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.perfil-imagem img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #3498db;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* ========================================
+   SEÇÃO 15: ESTILOS PARA PREVIEW DE IMAGEM EM POSTS
+   ======================================== */
+#preview {
+    max-width: 300px;
+    margin-top: 10px;
+    display: none;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: opacity 0.3s ease;
+}
+
+#preview.visible {
+    display: block;
+    opacity: 1;
+}
+
+/* ========================================
+   SEÇÃO 16: ESTILOS PARA MENSAGENS DE ERRO E SUCESSO
+   ======================================== */
+.erro {
+    background: #e74c3c;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(231,76,60,0.3);
+}
+
+.sucesso {
+    background: #27ae60;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(39,174,96,0.3);
+}
+
+/* ========================================
+   SEÇÃO 17: ESTILOS PARA TABELAS NO PAINEL ADMIN
+   ======================================== */
+.tabela-responsiva {
+    overflow-x: auto;
+    margin: 30px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead tr {
+    background: #2c3e50;
+}
+
+th {
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+td img {
+    width: 80px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.acoes {
+    display: flex;
+    gap: 10px;
+}
+
+/* ========================================
+   SEÇÃO 18: ESTILOS PARA GRÁFICOS NO PAINEL ADMIN
+   ======================================== */
+.graficos-admin {
+    margin-top: 50px;
+}
+
+.grafico-box {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.grafico-box h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #2c3e50;
+}
+
+/* ========================================
+   SEÇÃO 19: ESTILOS PARA COMENTÁRIOS E AÇÕES NO ARTIGO
+   ======================================== */
+.comentarios h3 {
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    color: #2c3e50;
+}
+
+.comentario small {
+    display: block;
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 10px;
+}
+
+.adicionar-comentario button {
+    background: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.adicionar-comentario button:hover {
+    background: #2980b9;
+}
+
+.msg-comentario {
+    color: #27ae60;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+/* ========================================
+   SEÇÃO 20: ESTILOS ADICIONAIS PARA RESPONSIVIDADE E ACESSIBILIDADE
+   ======================================== */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 1000px;
+    }
+}
+
+@media (max-width: 992px) {
+    .grid-posts {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .cards-stats {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .cabecalho .container {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .menu {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .titulo-secao {
+        font-size: 1.8rem;
+    }
+    .formulario-central {
+        padding: 25px;
+    }
+    .card-post img {
+        height: 180px;
+    }
+}
+
+@media (max-width: 600px) {
+    .grid-posts {
+        grid-template-columns: 1fr;
+    }
+    .cabecalho .container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .menu a {
+        margin: 0 5px;
+        font-size: 0.9rem;
+    }
+    h2 {
+        font-size: 1.6rem;
+    }
+    button, .btn {
+        padding: 10px 15px;
+    }
+    #preview {
+        max-width: 100%;
+    }
+}
+
+/* ========================================
+   SEÇÃO 21: ESTILOS PARA SCROLLBAR PERSONALIZADO (OPCIONAL)
+   ======================================== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f4f6f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3498db;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2980b9;
+}
+
+/* ========================================
+   SEÇÃO 22: ESTILOS PARA INPUT TYPE FILE PERSONALIZADO
+   ======================================== */
+input[type="file"] {
+    border: 2px dashed #3498db;
+    background: #f8f9fa;
+    padding: 15px;
+    cursor: pointer;
+    text-align: center;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+input[type="file"]::file-selector-button {
+    background: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: #2980b9;
+}
+
+/* ========================================
+   SEÇÃO 23: ESTILOS PARA CONFIRM DIALOG (JS BASEADO)
+   ======================================== */
+ /* Como o confirm é JS, sem CSS específico, mas para modals futuros */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 2000;
+    text-align: center;
+}
+
+.modal button {
+    margin: 20px 10px 0;
+}
+
+/* ========================================
+   SEÇÃO 24: ESTILOS PARA GRÁFICOS CHART.JS
+   ======================================== */
+canvas {
+    max-width: 100%;
+    height: auto !important;
+}
+
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 80vh;
+    width: 80vw;
+}
+
+/* ========================================
+   SEÇÃO 25: ESTILOS PARA DARK MODE (OPCIONAL FUTURO)
+   ======================================== */
+body.dark-mode {
+    background: #1a1a1a;
+    color: #f4f6f9;
+}
+
+body.dark-mode .card-post {
+    background: #2c3e50;
+    color: #f4f6f9;
+}
+
+/* ========================================
+   SEÇÃO 27: ESTILOS PARA ACESSIBILIDADE (FOCUS STATES)
+   ======================================== */
+ focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+}
+
+[tabindex="0"]:focus {
+    outline: 2px solid #3498db;
+}
+
+/* ========================================
+   SEÇÃO 28: ESTILOS PARA PLACEHOLDERS
+   ======================================== */
+::placeholder {
+    color: #888;
+    font-style: italic;
+}
+
+:-ms-input-placeholder {
+    color: #888;
+    font-style: italic;
+}
+
+::-ms-input-placeholder {
+    color: #888;
+    font-style: italic;
+}
+
+/* ========================================
+   SEÇÃO 29: ESTILOS PARA SELECT E OPTION
+   ======================================== */
+select {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background: #f8f9fa;
+    font-size: 1rem;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejo in="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px;
+    transition: border 0.3s ease;
+}
+
+select:focus {
+    border: 2px solid #3498db;
+}
+
+/* ========================================
+   SEÇÃO 30: ESTILOS PARA FIM DO CSS - PERSONALIZAÇÕES EXTRAS
+   ======================================== */
+/* Adicione mais estilos aqui se precisar expandir no futuro */
+body {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --error-color: #e74c3c;
+    --success-color: #27ae60;
+    --text-color: #333;
+    --background-color: #f4f6f9;
+}
+
+/* Use variáveis para fácil manutenção */
+.btn-gostar {
+    background: var(--background-color);
+}
+
+.btn-gostar.gostou {
+    background: var(--error-color);
+}
+
+/* FIM DO CSS - TOTAL DE LINHAS: 850+ */
