@@ -1,0 +1,32 @@
+[
+    {
+        "artigo_id": 8,
+        "nome": "Miquito Mario",
+        "comentario": "Ola",
+        "data": 1763636291
+    },
+    {
+        "artigo_id": 2,
+        "nome": "Lianes Nhacula",
+        "comentario": "Um otimo conteudo!",
+        "data": 1763819577
+    },
+    {
+        "artigo_id": 9,
+        "nome": "Miquito Mario",
+        "comentario": "Perfeito!!",
+        "data": 1763820372
+    },
+    {
+        "artigo_id": 9,
+        "nome": "Miquito Mario",
+        "comentario": "Boaaaa!",
+        "data": 1763821065
+    },
+    {
+        "artigo_id": 7,
+        "nome": "Miquito Mario",
+        "comentario": "Parabens!",
+        "data": 1763821086
+    }
+]

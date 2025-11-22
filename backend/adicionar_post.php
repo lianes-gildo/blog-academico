@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $posts[] = $novoPost;
     file_put_contents('../data/posts.json', json_encode($posts, JSON_PRETTY_PRINT));
 
-    // Inicializa estatísticas do post
     $estatisticas = json_decode(file_get_contents('../data/estatisticas.json'), true);
     $estatisticas['visitas'][$novoId] = 0;
     $estatisticas['gostos'][$novoId] = [];

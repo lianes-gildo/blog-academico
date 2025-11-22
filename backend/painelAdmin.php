@@ -2,13 +2,13 @@
 session_start();
 require '../includes/header.php';
 
-// Proteção correta - só admin pode acessar
+
 if (!isset($_SESSION['papel']) || $_SESSION['papel'] !== 'admin') {
     header('Location: ../index.php');
     exit;
 }
 
-// Carrega os dados
+
 $posts = json_decode(file_get_contents('../data/posts.json'), true) ?? [];
 $usuarios = json_decode(file_get_contents('../data/usuarios.json'), true) ?? [];
 
@@ -30,11 +30,11 @@ $totalUsuarios = count($usuarios);
         </div>
     </div>
 
-    <div class="add-post-link">
+    <h3>Gerir Posts</h3>
+
+        <div class="add-post-link">
         <a href="adicionar_post.php" class="btn btn-grande">+ Adicionar Novo Post</a>
     </div>
-
-    <h3>Gerir Posts</h3>
     <?php if (empty($posts)): ?>
         <p>Nenhum post publicado ainda.</p>
     <?php else: ?>

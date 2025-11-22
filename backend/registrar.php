@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $usuarios = json_decode(file_get_contents('../data/usuarios.json'), true);
 
-        // Verifica se email já existe
         foreach ($usuarios as $u) {
             if ($u['email'] === $email) {
                 $erro = "Email já registrado!";
@@ -22,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!isset($erro)) {
-            // Novo usuário
             $novoId = empty($usuarios) ? 1 : max(array_column($usuarios, 'id')) + 1;
 
             $novoUsuario = [

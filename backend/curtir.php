@@ -13,7 +13,6 @@ $usuarioId = $_SESSION['usuario_id'];
 $estatisticas = json_decode(file_get_contents('../data/estatisticas.json'), true);
 $posts = json_decode(file_get_contents('../data/posts.json'), true);
 
-// Encontra o post para atualizar gostos no posts.json
 $indicePost = null;
 foreach ($posts as $i => $p) {
     if ($p['id'] == $postId) {
@@ -27,17 +26,14 @@ if ($indicePost === null) {
     exit;
 }
 
-// Lista de quem curtiu
 $gostasLista = $estatisticas['gostos'][$postId] ?? [];
 
 $jaCurtiu = in_array($usuarioId, $gostasLista);
 
 if ($jaCurtiu) {
-    // Unlike
     $gostasLista = array_diff($gostasLista, [$usuarioId]);
     $posts[$indicePost]['gostos']--;
 } else {
-    // Like
     $gostasLista[] = $usuarioId;
     $posts[$indicePost]['gostos']++;
 }

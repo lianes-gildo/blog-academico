@@ -20,7 +20,6 @@ if (!$post) {
     exit;
 }
 
-// Incrementar visualização
 $estatisticas = json_decode(file_get_contents('data/estatisticas.json'), true);
 $estatisticas['visitas'][$postId] = ($estatisticas['visitas'][$postId] ?? 0) + 1;
 file_put_contents('data/estatisticas.json', json_encode($estatisticas, JSON_PRETTY_PRINT));

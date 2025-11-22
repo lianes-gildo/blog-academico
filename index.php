@@ -5,7 +5,6 @@
         <?php
         $posts = json_decode(file_get_contents('data/posts.json'), true);
         if ($posts) {
-            // Ordenar por data (mais recente primeiro)
             usort($posts, function($a, $b) {
                 return strtotime($b['data']) - strtotime($a['data']);
             });

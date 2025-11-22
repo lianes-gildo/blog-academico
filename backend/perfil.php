@@ -21,32 +21,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $usuario['nome'] = $novoNome;
 
-        // Upload nova foto
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
 
-            // Pega a extensão da imagem
             $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
 
-            // Gera o nome final da foto
             $nomeFoto = "user_" . $usuarioId . "." . $ext;
 
-            // Caminho final no servidor
             $caminhoDestino = "../assets/img/users/" . $nomeFoto;
 
-            // Move o arquivo enviado para a pasta correta
             if (move_uploaded_file($_FILES['foto']['tmp_name'], $caminhoDestino)) {
 
-                // Caminho que será salvo no JSON (sem '../')
                 $usuario['imagem'] = "assets/img/users/" . $nomeFoto;
                 
             } else {
-                // Caso algo dê errado no upload
                 $usuario['imagem'] = $usuario['imagem'] ?? null;
             }
         }
 
 
-        // Atualiza no array
         foreach ($usuarios as &$u) {
             if ($u['id'] == $usuarioId) {
                 $u = $usuario;

@@ -1,8 +1,4 @@
 <?php
-// ================================
-// PÁGINA SOBRE
-// ================================
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -12,7 +8,6 @@ $paginaAtual = 'sobre';
 require __DIR__ . '/includes/header.php';
 ?>
 
-<!-- ===== CSS IN-PAGE ===== -->
 <style>
     body {
         background-color: white;
@@ -38,7 +33,6 @@ require __DIR__ . '/includes/header.php';
         border-radius: 5px;
     }
 </style>
-<!-- ======================= -->
 
 <main class="conteudo conteudo-limitado">
     <section class="secao-pagina-estatica">
@@ -84,9 +78,7 @@ require __DIR__ . '/includes/header.php';
 
             <h2 class="mt-3">Foco em Moçambique</h2>
             <p>
-                O blog considera a realidade de estudantes em Moçambique, inclusive
-                horários no fuso <strong>África/Maputo</strong>, exemplos práticos e referências
-                adaptadas ao contexto local sempre que possível.
+                O blog considera a realidade de estudantes em Moçambique!
             </p>
         </div>
     </section>

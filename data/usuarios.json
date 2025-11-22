@@ -1,0 +1,10 @@
+[
+    {
+        "id": 4,
+        "nome": "Lianes Nhacula",
+        "email": "lianes@gmail.com",
+        "senha": "$2y$10$oX\/kqPmd3eHE.50E3KhMvulIHNR0Uhgz9qq2BP1a\/XA7sTpg9rCOK",
+        "papel": "admin",
+        "imagem": "assets\/img\/users\/user_4.jpg"
+    }
+]

@@ -21,7 +21,7 @@ $novoComentario = [
     'artigo_id' => $postId,
     'nome' => $nome,
     'comentario' => $comentario,
-    'data' => time()  // timestamp para ordenar
+    'data' => time()
 ];
 
 $comentarios[] = $novoComentario;

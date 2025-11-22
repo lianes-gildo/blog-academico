@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     foreach ($usuarios as $usuario) {
         if ($usuario['email'] === $email && password_verify($senha, $usuario['senha'])) {
-            // Login sucesso
             $_SESSION['usuario_id'] = $usuario['id'];
             $_SESSION['nome'] = $usuario['nome'];
             $_SESSION['papel'] = $usuario['papel'];

@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $post['descricao_longa'] = $_POST['descricao_longa'];
 
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === 0) {
-        // Apaga imagem antiga se existir
         if (file_exists('../' . $post['imagem'])) unlink('../' . $post['imagem']);
         
         $ext = pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION);
@@ -29,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $post['imagem'] = 'assets/img/posts/' . $nomeImagem;
     }
 
-    // Atualiza no array
     foreach ($posts as &$p) {
         if ($p['id'] == $postId) {
             $p = $post;

@@ -3,6 +3,6 @@
             <p>© Desenvolvido por Lianes Gildo Nhacula</p>
         </div>
     </footer>
-    <script src="../assets/js/script.js"></script> <!-- Caminho corrigido para /backend -->
+    <script src="../assets/js/script.js"></script>
 </body>
 </html>
