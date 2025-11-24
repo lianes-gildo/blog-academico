@@ -5,6 +5,33 @@
         "email": "lianes@gmail.com",
         "senha": "$2y$10$oX\/kqPmd3eHE.50E3KhMvulIHNR0Uhgz9qq2BP1a\/XA7sTpg9rCOK",
         "papel": "admin",
-        "imagem": "assets\/img\/users\/user_4.jpg"
+        "imagem": "assets\/img\/users\/user_4.jpg",
+        "data_registro": "2025-01-15 10:30:00",
+        "status": "ativo"
+    },
+    {
+        "id": 5,
+        "nome": "Lupin",
+        "email": "lupin@gmail.com",
+        "senha": "$2y$10$LUAw6HvZgKEIz7pBvSeQjOzJlFTt2AyVopIhUSWyW5wxgloZyexCu",
+        "papel": "editor",
+        "imagem": "assets\/img\/users\/user_5_1763853585.jpg",
+        "status": "ativo"
+    },
+    {
+        "id": 6,
+        "nome": "Teste",
+        "email": "teste@gmail.com",
+        "senha": "$2y$10$ssOlWSgrf.Ppwkv95jiBauok4HVvm2fp3BhZ0Z5sKd0Q4dSESPQRu",
+        "papel": "usuario",
+        "imagem": "assets\/img\/users\/default.jpg"
+    },
+    {
+        "id": 7,
+        "nome": "Chiquinho",
+        "email": "chiquinho@gmail.com",
+        "senha": "$2y$10$gW8.H7mHh\/0dZKFCAD2QkOxse6q.\/KpOUmpHI36nQM7h\/106eF6gi",
+        "papel": "usuario",
+        "imagem": "assets\/img\/users\/default.jpg"
     }
 ]

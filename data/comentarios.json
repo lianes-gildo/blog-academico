@@ -1,32 +1,210 @@
 [
     {
-        "artigo_id": 8,
-        "nome": "Miquito Mario",
-        "comentario": "Ola",
-        "data": 1763636291
-    },
-    {
-        "artigo_id": 2,
+        "artigo_id": 9,
         "nome": "Lianes Nhacula",
-        "comentario": "Um otimo conteudo!",
-        "data": 1763819577
+        "comentario": "basddbjkajda",
+        "data": 1763924940,
+        "comentario_id": 1,
+        "likes": [
+            4,
+            5
+        ],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 2,
+        "artigo_id": 9,
+        "nome": "Lianes Nhacula",
+        "usuario_id": 4,
+        "comentario": "otimo",
+        "data": 1763924950,
+        "pai_id": 1,
+        "likes": [
+            5
+        ],
+        "dislikes": []
+    },
+    {
+        "artigo_id": 3,
+        "nome": "Lupin",
+        "comentario": "jafbfbfbauisfa",
+        "data": 1763926551,
+        "comentario_id": 3,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 4,
+        "artigo_id": 3,
+        "nome": "Lupin",
+        "usuario_id": 5,
+        "comentario": "otimo",
+        "data": 1763926559,
+        "pai_id": 3,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "artigo_id": 3,
+        "nome": "Lupin",
+        "comentario": "vgvudabdbiwdbuia",
+        "data": 1763926568,
+        "comentario_id": 5,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 6,
+        "artigo_id": 3,
+        "nome": "Lupin",
+        "usuario_id": 5,
+        "comentario": "great",
+        "data": 1763926587,
+        "pai_id": 3,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "artigo_id": 3,
+        "nome": "Lupin",
+        "comentario": "jbiasbajbicabjcasjic",
+        "data": 1763926595,
+        "comentario_id": 7,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 8,
+        "artigo_id": 3,
+        "nome": "Lupin",
+        "usuario_id": 5,
+        "comentario": "otimoooooo",
+        "data": 1763926612,
+        "pai_id": 5,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 9,
+        "artigo_id": 3,
+        "nome": "Lupin",
+        "usuario_id": 5,
+        "comentario": "perfeitooooo",
+        "data": 1763926640,
+        "pai_id": 5,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "artigo_id": 5,
+        "nome": "Teste",
+        "comentario": "ola",
+        "data": 1763928695,
+        "comentario_id": 10,
+        "likes": [
+            6
+        ],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 11,
+        "artigo_id": 9,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "blablabla",
+        "data": 1763964456,
+        "pai_id": 2,
+        "likes": [
+            5
+        ],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 12,
+        "artigo_id": 9,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "wauuuuuu",
+        "data": 1763964634,
+        "pai_id": 1,
+        "likes": [],
+        "dislikes": [
+            5
+        ]
     },
     {
         "artigo_id": 9,
-        "nome": "Miquito Mario",
-        "comentario": "Perfeito!!",
-        "data": 1763820372
+        "nome": "Chiquinho",
+        "comentario": "dcdcdc",
+        "data": 1763964663,
+        "comentario_id": 13,
+        "likes": [
+            5
+        ],
+        "dislikes": []
     },
     {
+        "artigo_id": 8,
+        "nome": "Chiquinho",
+        "comentario": "hbhc h chc hc asc",
+        "data": 1763965264,
+        "comentario_id": 14,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 15,
+        "artigo_id": 8,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "claro que simmmmmmm",
+        "data": 1763965272,
+        "pai_id": 14,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 16,
+        "artigo_id": 8,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "claro que sim",
+        "data": 1763965293,
+        "pai_id": 14,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 17,
+        "artigo_id": 8,
+        "nome": "Lupin",
+        "usuario_id": 5,
+        "comentario": "sempre",
+        "data": 1763965359,
+        "pai_id": 15,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 18,
+        "artigo_id": 8,
+        "nome": "Lupin",
+        "usuario_id": 5,
+        "comentario": "blabla",
+        "data": 1763965383,
+        "pai_id": 16,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 19,
         "artigo_id": 9,
-        "nome": "Miquito Mario",
-        "comentario": "Boaaaa!",
-        "data": 1763821065
-    },
-    {
-        "artigo_id": 7,
-        "nome": "Miquito Mario",
-        "comentario": "Parabens!",
-        "data": 1763821086
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "@Chiquinho claramente.",
+        "data": 1763966536,
+        "pai_id": 13,
+        "likes": [],
+        "dislikes": []
     }
 ]

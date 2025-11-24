@@ -1,0 +1,181 @@
+usando html, css, js e php, crie um porjecto assim:
+
+/blog-academico
+│
+├── /assets
+│     ├── css
+│     │     └── style.css
+│     ├── js
+│     │     └── script.js
+│     └── img
+│           └── posts
+│	    └──users
+│
+├── /data
+│     ├── posts.json         
+│     ├── comentarios.json      
+│     ├──usuarios.json           
+│     └── estatisticas.json    
+│
+├── /backend
+│	├── adicionar_post.php              
+│	├── apagar_post.php                 
+│	├── comentar.php          
+│	├── curtir.php              
+│	├── editar_post.php            
+│	├── login.php          
+│	├── logout.php	
+│	├── painelAdmin.php
+│	├── perfil.php 	
+│	├── proteger_pagina.php                
+│	└── registrar.php           
+├──/includes
+│	├──footer.php
+│	├──header.php
+│
+├──artigo.php
+├──index.php
+├──sobre.php
+
+
+este porjecto tem como objectivo fazer posts academicos, onde os usuarios podem logar parac reagir, comentar e compartilhar.
+
+o usuario deslogado vera todos posts mas nao podera dar like e nem comentar, mas podera compartilhar, tem que ter uma logica que vai contar como view a cada click em "Ler mais" as views incrementam +1, quando o usuario logado comenta e envia o comentario o campo de texto(onde ele escreve e comentario fica limpo) e aparece uma mensagem de "enviado", o usuario logado so pode dar like uma vez no post, uma vez like dado ao cliacr novamente encima do like esta dar unlike quando ele tiver dado like o boato de gosto fica vermelho caso nao tenha dado fica com o background padrao.
+
+header e o footer tem que ser compartilhados:
+header: a esquerda tera o nome "Blog-Academico" no centro o menu "Inicio" "Sobre" "Susgestoes", a direita teremos "Entrar" "Registrar"(so vai aparecer assim quando nao estiver logado), caso esteja logado e seja um usuario(aparecer a imagem de perfil nome do usario(cetinha para baixo mostrando que e um menu dropdown) ao clicar aparece "perfil" e "Sair", caso seja admin aparece "Perfil" "Dashboard Admin" "Sair"
+
+no footer so tera "© Desenvolvido por Lianes Gildo Nhacula"
+
+na pagina do index os posts vao aparecer com o seguinte 
+imagem
+Titulo 
+descricao curta 
+Autor do post(nome do admin que fez o post) depois ao lado a data e a hora(date time) do post
+Gotos e Views
+link "Ler mais"
+
+na pagina artigo 
+titulo
+imagem(maior que a da home)
+autor data e hora
+descricao longa
+botao para gostar, compartilhar e views 
+comentarios
+aqui virao todos comentarios
+nome do usuario que comentou: comentario
+adicionar comentario
+campo para adicionar o comentario. aqui ao lado botao para enviar o comentario.
+
+editar perfil:
+imagem
+Nome:
+senha antiga:
+senha nova:
+confirmar nova senha:
+boatao atualizar
+botao apagar conta
+
+Dashboard admin
+botap Adicionar post(titulo, descricao curta, descriacao curta, descricao longa imagem(ao escolher iamgem tem que ser possivel ter pre visualizacao a imagem so pode ser guarada assim que clicar o botao publicar) botao publicar, botao voltar ao Dashboard)
+boatao gerir posts(aparecem todos os posts em uma tabela assim) #ID|Imagem|Descricao curta|descriacao longa|acoes(Editar e Apagar)
+
+card1: Posts (numero tatal de posts)
+card 2: (numero total de usuarios)
+ 
+por baixo podemos ter 2 graficos
+media de usuarios e media de likes.
+
+
+login
+email
+senha
+bot    {
+        "id": 3,
+        "nome": "Luisa Marinze",
+        "email": "luisa@gmail.com",
+        "senha": "$2y$10$3ZzVc4Du6YT8hWzsuvzkb.LeUAHpixELepOuBI\/BuV3R6lTEYp34C",
+        "papel": "usuario",
+        "imagem": "..\/assets\/img\/691de6831616c.jpg"
+    }ao "Não tem conta? Registar"
+
+registrar:
+Nome
+Email
+senha
+confirmar senha
+Já tem conta? Login
+
+
+e mais ou menos essa logica, peco que acrescentes algo para melhorar, nao deixe o site mais complexo que isso.
+
+peco que use nomes de variaveis, metodos, class, id em postugues para minha melhor percepcao
+
+NOTAS IMPORATNTES:
+eu estou em mocambique 
+use o porgues br 
+e o horario mocambicano.
+
+
+estrutura do:
+uruarios.json:
+    {
+        "id": 3,
+        "nome": "",
+        "email": "",
+        "senha": "",(guarde em hash)
+        "papel": "", (user ou admin)
+        "imagem": "..\/assets\/img\/posts\/"
+    }
+    
+    
+posts.json:
+    {
+        "id": 2,
+        "titulo": "",
+        "autor": "",
+        "data": "",(date time)
+        "imagem": "assets\/img\/user\/",
+        "descricao_curta": "",
+        "descricao_longa": "",
+        "gostos": ,
+        "visitas": 
+    }
+estatisticas.json:
+{
+    "gostos": {
+        "2": [
+            3
+        ],
+        "1": [
+            3
+        ]
+    },
+    "visitas": {
+        "1": 49,
+        "2": 15
+    }
+    
+    "compartilhamentos":{
+    "1": 3
+    }
+}
+
+
+comentarios.json:
+
+    {
+        "artigo_id": "",
+        "nome": "",
+        "comentario": "",
+        "data": "1"(date time)
+    }
+    
+    
+aplique um css bem moderno, responsivo
+na pagina de "inicio" no pc container triplo para com 3 a 3 posts , no tablet container duplo com 2 a 2 posts, no mobile container unico um a um posts.
+
+
+peco codigos bem comentandos explicando que cada metodo/ funcionalidade faz.
+
+❌ Email ou senha incorreto/a!
