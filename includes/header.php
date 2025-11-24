@@ -40,7 +40,7 @@ function getBasePath() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 Blog Acadêmico Moçambique</title>
+    <title>Blog Acadêmico Moçambique</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="<?php echo getBasePath(); ?>assets/img/favicon.png">
@@ -295,7 +295,7 @@ function getBasePath() {
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="<?php echo getBasePath(); ?>index.php">
                 <img src="<?php echo getBasePath(); ?>assets/img/logo.png" alt="Logo" class="navbar-logo me-2">
-                📚 Blog Acadêmico
+                Blog Acadêmico
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -315,14 +315,6 @@ function getBasePath() {
                         </a>
                     </li>
                 </ul>
-                
-                <!-- Barra de Pesquisa -->
-                <form class="search-form mx-3 d-none d-lg-block" action="<?php echo getBasePath(); ?>buscar.php" method="GET">
-                    <div class="search-wrapper">
-                        <i class="bi bi-search search-icon"></i>
-                        <input type="text" name="q" class="search-input" placeholder="🔍 Pesquisar artigos..." required>
-                    </div>
-                </form>
                 
                 <div class="d-flex align-items-center">
                     <?php if (usuarioLogado()): ?>
