@@ -34,6 +34,16 @@ function getBasePath() {
     }
     return '';
 }
+
+// Obter número de notificações não lidas
+$notificacoesNaoLidas = 0;
+if (usuarioLogado()) {
+    $arquivoNotif = __DIR__ . '/../backend/criar_notificacao.php';
+    if (file_exists($arquivoNotif)) {
+        require_once $arquivoNotif;
+        $notificacoesNaoLidas = contarNotificacoesNaoLidas($_SESSION['usuario_id']);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-MZ">
@@ -173,6 +183,58 @@ function getBasePath() {
             box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
         }
         
+        /* Notificações Badge */
+        .notifications-bell {
+            position: relative;
+            color: white;
+            font-size: 1.3rem;
+            padding: 8px 12px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            display: inline-block;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+        
+        .notifications-bell:hover {
+            background: var(--primary-orange);
+            transform: scale(1.1);
+            color: white;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff3b30;
+            color: white;
+            border-radius: 50%;
+            min-width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border: 2px solid var(--primary-blue);
+            animation: pulse 2s infinite;
+            padding: 0 5px;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 59, 48, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 59, 48, 0);
+            }
+        }
+        
         /* User Dropdown */
         .user-profile-img {
             width: 40px;
@@ -212,18 +274,76 @@ function getBasePath() {
             width: 20px;
         }
         
-        /* Hamburger Menu */
+        /* Hamburger Menu Animado */
         .navbar-toggler {
             border: none;
             padding: 5px;
+            width: 40px;
+            height: 40px;
+            position: relative;
+            cursor: pointer;
+            background: transparent !important;
         }
         
         .navbar-toggler:focus {
             box-shadow: none;
         }
         
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        .hamburger {
+            width: 30px;
+            height: 20px;
+            position: relative;
+            transform: rotate(0deg);
+            transition: .5s ease-in-out;
+            cursor: pointer;
+            display: block;
+            margin: auto;
+        }
+        
+        .hamburger span {
+            display: block;
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            background: white;
+            border-radius: 3px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: .25s ease-in-out;
+        }
+        
+        .hamburger span:nth-child(1) {
+            top: 0px;
+        }
+        
+        .hamburger span:nth-child(2),
+        .hamburger span:nth-child(3) {
+            top: 8px;
+        }
+        
+        .hamburger span:nth-child(4) {
+            top: 16px;
+        }
+        
+        .navbar-toggler:not(.collapsed) .hamburger span:nth-child(1) {
+            top: 8px;
+            width: 0%;
+            left: 50%;
+        }
+        
+        .navbar-toggler:not(.collapsed) .hamburger span:nth-child(2) {
+            transform: rotate(45deg);
+        }
+        
+        .navbar-toggler:not(.collapsed) .hamburger span:nth-child(3) {
+            transform: rotate(-45deg);
+        }
+        
+        .navbar-toggler:not(.collapsed) .hamburger span:nth-child(4) {
+            top: 8px;
+            width: 0%;
+            left: 50%;
         }
         
         /* Mobile Adjustments */
@@ -246,6 +366,10 @@ function getBasePath() {
             .btn-login, .btn-register {
                 width: 100%;
                 margin: 10px 0;
+            }
+            
+            .notifications-bell {
+                margin-right: 10px;
             }
             
             .user-dropdown-mobile {
@@ -298,8 +422,13 @@ function getBasePath() {
                 Blog Acadêmico
             </a>
             
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-expanded="false">
+                <span class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -318,6 +447,14 @@ function getBasePath() {
                 
                 <div class="d-flex align-items-center">
                     <?php if (usuarioLogado()): ?>
+                        <!-- Ícone de Notificações -->
+                        <a href="<?php echo getBasePath(); ?>backend/notificacoes.php" class="notifications-bell" title="Notificações">
+                            <i class="bi bi-bell-fill"></i>
+                            <?php if ($notificacoesNaoLidas > 0): ?>
+                                <span class="notification-badge"><?php echo $notificacoesNaoLidas > 9 ? '9+' : $notificacoesNaoLidas; ?></span>
+                            <?php endif; ?>
+                        </a>
+                        
                         <!-- Desktop User Menu -->
                         <div class="dropdown user-dropdown-desktop">
                             <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -329,6 +466,14 @@ function getBasePath() {
                                 <li>
                                     <a class="dropdown-item" href="<?php echo getBasePath(); ?>backend/perfil.php">
                                         <i class="bi bi-person-circle"></i> Meu Perfil
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="<?php echo getBasePath(); ?>backend/notificacoes.php">
+                                        <i class="bi bi-bell-fill"></i> Notificações
+                                        <?php if ($notificacoesNaoLidas > 0): ?>
+                                            <span class="badge bg-danger ms-2"><?php echo $notificacoesNaoLidas; ?></span>
+                                        <?php endif; ?>
                                     </a>
                                 </li>
                                 <?php if (ehAdmin()): ?>
@@ -361,6 +506,12 @@ function getBasePath() {
                             </div>
                             <a class="nav-link" href="<?php echo getBasePath(); ?>backend/perfil.php">
                                 <i class="bi bi-person-circle"></i> Meu Perfil
+                            </a>
+                            <a class="nav-link" href="<?php echo getBasePath(); ?>backend/notificacoes.php">
+                                <i class="bi bi-bell-fill"></i> Notificações
+                                <?php if ($notificacoesNaoLidas > 0): ?>
+                                    <span class="badge bg-danger ms-2"><?php echo $notificacoesNaoLidas; ?></span>
+                                <?php endif; ?>
                             </a>
                             <?php if (ehAdmin()): ?>
                                 <a class="nav-link" href="<?php echo getBasePath(); ?>backend/painelAdmin.php">

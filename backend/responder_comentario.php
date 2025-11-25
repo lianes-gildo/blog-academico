@@ -1,6 +1,10 @@
 <?php
+/**
+ * backend/responder_comentario.php - Atualizado com sistema de notificações
+ */
 session_start();
 header('Content-Type: application/json');
+require_once 'notificacoes_processor.php';
 
 if (!isset($_SESSION['usuario_id'])) {
     echo json_encode(['sucesso' => false, 'mensagem' => 'Faça login para responder']);
@@ -69,6 +73,22 @@ $comentarios[] = $novaResposta;
 
 // Salvar
 if (file_put_contents($arquivoComentarios, json_encode($comentarios, JSON_PRETTY_PRINT))) {
+    // Processar notificações
+    // 1. Notificar o dono do comentário pai
+    processarNotificacaoResposta($comentarioIdPai, $usuarioId, $nome);
+    
+    // 2. Processar menções na resposta
+    processarNotificacoesComentario($resposta, $artigoId, $nome);
+    
+    // Atualizar o ID do comentário nas notificações criadas
+    $notificacoes = json_decode(file_get_contents('../data/notificacoes.json'), true);
+    foreach ($notificacoes as &$notif) {
+        if ($notif['comentario_id'] == 0 && $notif['post_id'] == $artigoId && $notif['usuario_origem_nome'] == $nome) {
+            $notif['comentario_id'] = $novoId;
+        }
+    }
+    file_put_contents('../data/notificacoes.json', json_encode($notificacoes, JSON_PRETTY_PRINT));
+    
     echo json_encode([
         'sucesso' => true,
         'comentario_id' => $novoId,

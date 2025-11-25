@@ -1,3 +1,24 @@
 [
-    
+  {
+    "id": 1,
+    "tipo": "mention",
+    "usuario_destino_id": 5,
+    "usuario_origem_nome": "Lianes Nhacula",
+    "comentario_id": 15,
+    "post_id": 9,
+    "post_titulo": "Como Montar um Portfólio Acadêmico",
+    "data": 1763964456,
+    "lida": false
+  },
+  {
+    "id": 2,
+    "tipo": "like",
+    "usuario_destino_id": 7,
+    "usuario_origem_nome": "Lupin",
+    "comentario_id": 13,
+    "post_id": 9,
+    "post_titulo": "Como Montar um Portfólio Acadêmico",
+    "data": 1763965359,
+    "lida": false
+  }
 ]

@@ -193,7 +193,7 @@ $usuarios = json_decode(file_get_contents('../data/usuarios.json'), true) ?? [];
                             <h6 class="mb-3 fw-bold">Ações:</h6>
                             
                             <!-- Alterar Papel -->
-                            <form method="POST" class="d-inline">
+                            <form method="POST" class="d-inline" onsubmit="return confirmarAlteracaoPapel('<?php echo htmlspecialchars($user['nome']); ?>', event.submitter.value)">
                                 <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                                 <input type="hidden" name="alterar_papel" value="1">
                                 <div class="btn-group" role="group">
@@ -222,7 +222,7 @@ $usuarios = json_decode(file_get_contents('../data/usuarios.json'), true) ?? [];
                             
                             <!-- Suspender/Reativar -->
                             <?php if (!$suspenso): ?>
-                                <form method="POST" class="mt-3">
+                                <form method="POST" class="mt-3" onsubmit="return confirmarSuspensao('<?php echo htmlspecialchars($user['nome']); ?>', this.duracao.options[this.duracao.selectedIndex].text)">
                                     <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                                     <input type="hidden" name="suspender" value="1">
                                     <label class="form-label fw-bold">Suspender por:</label>
@@ -246,7 +246,7 @@ $usuarios = json_decode(file_get_contents('../data/usuarios.json'), true) ?? [];
                                     </div>
                                 </form>
                             <?php else: ?>
-                                <form method="POST" class="mt-3">
+                                <form method="POST" class="mt-3" onsubmit="return confirmarReativacao('<?php echo htmlspecialchars($user['nome']); ?>')">
                                     <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                                     <input type="hidden" name="reativar" value="1">
                                     <button type="submit" class="btn btn-success w-100">
@@ -265,5 +265,23 @@ $usuarios = json_decode(file_get_contents('../data/usuarios.json'), true) ?? [];
         <?php endforeach; ?>
     </div>
 </main>
+
+<script>
+function confirmarAlteracaoPapel(nomeUsuario, novoPapel) {
+    const papelFormatado = novoPapel === 'usuario' ? 'Usuário' : (novoPapel === 'editor' ? 'Editor' : 'Administrador');
+    const mensagem = `⚠️ Tem certeza que deseja alterar o papel de "${nomeUsuario}" para "${papelFormatado}"?\n\nEsta ação mudará as permissões do usuário no sistema.`;
+    return confirm(mensagem);
+}
+
+function confirmarSuspensao(nomeUsuario, duracao) {
+    const mensagem = `⚠️ Tem certeza que deseja suspender "${nomeUsuario}" por ${duracao}?\n\nO usuário não poderá acessar o sistema durante este período.`;
+    return confirm(mensagem);
+}
+
+function confirmarReativacao(nomeUsuario) {
+    const mensagem = `✅ Tem certeza que deseja reativar a conta de "${nomeUsuario}"?\n\nO usuário voltará a ter acesso completo ao sistema.`;
+    return confirm(mensagem);
+}
+</script>
 
 <?php require '../includes/footer.php'; ?>
