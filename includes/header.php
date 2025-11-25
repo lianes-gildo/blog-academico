@@ -38,10 +38,16 @@ function getBasePath() {
 // Obter número de notificações não lidas
 $notificacoesNaoLidas = 0;
 if (usuarioLogado()) {
-    $arquivoNotif = __DIR__ . '/../backend/criar_notificacao.php';
+    $arquivoNotif = __DIR__ . '/../data/notificacoes.json';
     if (file_exists($arquivoNotif)) {
-        require_once $arquivoNotif;
-        $notificacoesNaoLidas = contarNotificacoesNaoLidas($_SESSION['usuario_id']);
+        $notificacoes = json_decode(file_get_contents($arquivoNotif), true);
+        if (is_array($notificacoes)) {
+            foreach ($notificacoes as $n) {
+                if ($n['usuario_destino_id'] == $_SESSION['usuario_id'] && (!isset($n['lida']) || $n['lida'] === false)) {
+                    $notificacoesNaoLidas++;
+                }
+            }
+        }
     }
 }
 ?>
@@ -183,19 +189,23 @@ if (usuarioLogado()) {
             box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
         }
         
-        /* Notificações Badge */
+        /* Notificações Badge - MELHORADO */
         .notifications-bell {
             position: relative;
             color: white;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             padding: 8px 12px;
             border-radius: 50%;
             transition: all 0.3s ease;
             cursor: pointer;
             background: rgba(255, 255, 255, 0.1);
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             margin-right: 15px;
             text-decoration: none;
+            width: 45px;
+            height: 45px;
         }
         
         .notifications-bell:hover {
@@ -204,11 +214,22 @@ if (usuarioLogado()) {
             color: white;
         }
         
+        .notifications-bell i {
+            animation: bellRing 3s ease-in-out infinite;
+        }
+        
+        @keyframes bellRing {
+            0%, 100% { transform: rotate(0deg); }
+            5%, 15% { transform: rotate(15deg); }
+            10%, 20% { transform: rotate(-15deg); }
+            25% { transform: rotate(0deg); }
+        }
+        
         .notification-badge {
             position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff3b30;
+            top: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, #ff3b30, #ff6b6b);
             color: white;
             border-radius: 50%;
             min-width: 22px;
@@ -217,10 +238,11 @@ if (usuarioLogado()) {
             align-items: center;
             justify-content: center;
             font-size: 0.7rem;
-            font-weight: 700;
-            border: 2px solid var(--primary-blue);
+            font-weight: 800;
+            border: 3px solid var(--primary-blue);
             animation: pulse 2s infinite;
             padding: 0 5px;
+            box-shadow: 0 2px 8px rgba(255, 59, 48, 0.6);
         }
         
         @keyframes pulse {
@@ -274,15 +296,21 @@ if (usuarioLogado()) {
             width: 20px;
         }
         
-        /* Hamburger Menu Animado */
+        /* Hamburger Menu Animado - MELHORADO */
         .navbar-toggler {
             border: none;
             padding: 5px;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             position: relative;
             cursor: pointer;
-            background: transparent !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-toggler:hover {
+            background: rgba(255, 255, 255, 0.2) !important;
         }
         
         .navbar-toggler:focus {
@@ -326,6 +354,7 @@ if (usuarioLogado()) {
             top: 16px;
         }
         
+        /* Estado aberto (X) */
         .navbar-toggler:not(.collapsed) .hamburger span:nth-child(1) {
             top: 8px;
             width: 0%;
@@ -357,6 +386,18 @@ if (usuarioLogado()) {
                 margin-top: 15px;
                 padding: 20px;
                 border-radius: 15px;
+                animation: slideDown 0.3s ease;
+            }
+            
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
             
             .nav-link {
@@ -370,6 +411,7 @@ if (usuarioLogado()) {
             
             .notifications-bell {
                 margin-right: 10px;
+                margin-bottom: 0;
             }
             
             .user-dropdown-mobile {
@@ -381,7 +423,7 @@ if (usuarioLogado()) {
             .user-info-mobile {
                 display: flex;
                 align-items: center;
-                padding: 10px;
+                padding: 15px;
                 background: rgba(255, 255, 255, 0.1);
                 border-radius: 10px;
                 margin-bottom: 10px;
@@ -451,7 +493,7 @@ if (usuarioLogado()) {
                         <a href="<?php echo getBasePath(); ?>backend/notificacoes.php" class="notifications-bell" title="Notificações">
                             <i class="bi bi-bell-fill"></i>
                             <?php if ($notificacoesNaoLidas > 0): ?>
-                                <span class="notification-badge"><?php echo $notificacoesNaoLidas > 9 ? '9+' : $notificacoesNaoLidas; ?></span>
+                                <span class="notification-badge"><?php echo $notificacoesNaoLidas > 99 ? '99+' : $notificacoesNaoLidas; ?></span>
                             <?php endif; ?>
                         </a>
                         

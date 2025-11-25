@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         file_put_contents('../data/usuarios.json', json_encode($usuarios, JSON_PRETTY_PRINT));
         $mensagem = "✅ Papel do usuário atualizado com sucesso!";
+        $tipoMensagem = "success";
     }
     
     if (isset($_POST['suspender'])) {
@@ -41,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         file_put_contents('../data/usuarios.json', json_encode($usuarios, JSON_PRETTY_PRINT));
         $mensagem = "⚠️ Usuário suspenso até " . date('d/m/Y H:i', strtotime($dataExpiracao));
+        $tipoMensagem = "warning";
     }
     
     if (isset($_POST['reativar'])) {
@@ -55,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         file_put_contents('../data/usuarios.json', json_encode($usuarios, JSON_PRETTY_PRINT));
         $mensagem = "✅ Usuário reativado com sucesso!";
+        $tipoMensagem = "success";
     }
 }
 
@@ -74,6 +77,18 @@ $usuarios = json_decode(file_get_contents('../data/usuarios.json'), true) ?? [];
         padding: 20px;
         border: none;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        animation: slideInDown 0.5s ease;
+    }
+    
+    @keyframes slideInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
     
     .user-card {
@@ -82,6 +97,12 @@ $usuarios = json_decode(file_get_contents('../data/usuarios.json'), true) ?? [];
         padding: 30px;
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
         margin-bottom: 30px;
+        transition: all 0.3s ease;
+    }
+    
+    .user-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     }
     
     .user-avatar {
@@ -131,6 +152,11 @@ $usuarios = json_decode(file_get_contents('../data/usuarios.json'), true) ?? [];
         margin: 5px;
     }
     
+    .btn-role:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
     @media (max-width: 768px) {
         .user-card {
             padding: 20px;
@@ -152,7 +178,7 @@ $usuarios = json_decode(file_get_contents('../data/usuarios.json'), true) ?? [];
 
 <main class="container pb-5">
     <?php if (isset($mensagem)): ?>
-        <div class="alert alert-success alert-custom">
+        <div class="alert alert-<?php echo $tipoMensagem; ?> alert-custom">
             <?php echo $mensagem; ?>
         </div>
     <?php endif; ?>
@@ -193,23 +219,28 @@ $usuarios = json_decode(file_get_contents('../data/usuarios.json'), true) ?? [];
                             <h6 class="mb-3 fw-bold">Ações:</h6>
                             
                             <!-- Alterar Papel -->
-                            <form method="POST" class="d-inline" onsubmit="return confirmarAlteracaoPapel('<?php echo htmlspecialchars($user['nome']); ?>', event.submitter.value)">
+                            <form method="POST" class="d-inline" id="form-papel-<?php echo $user['id']; ?>">
                                 <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                                 <input type="hidden" name="alterar_papel" value="1">
+                                <input type="hidden" name="papel" id="papel-input-<?php echo $user['id']; ?>">
+                                
                                 <div class="btn-group" role="group">
-                                    <button type="submit" name="papel" value="usuario" 
+                                    <button type="button" 
+                                            onclick="confirmarAlteracaoPapel(<?php echo $user['id']; ?>, 'usuario', '<?php echo addslashes($user['nome']); ?>')"
                                             class="btn btn-role btn-sm" 
                                             style="background: #4facfe; color: white;"
                                             <?php echo $user['papel'] === 'usuario' ? 'disabled' : ''; ?>>
                                         👤 Usuário
                                     </button>
-                                    <button type="submit" name="papel" value="editor" 
+                                    <button type="button" 
+                                            onclick="confirmarAlteracaoPapel(<?php echo $user['id']; ?>, 'editor', '<?php echo addslashes($user['nome']); ?>')"
                                             class="btn btn-role btn-sm" 
                                             style="background: #f093fb; color: white;"
                                             <?php echo $user['papel'] === 'editor' ? 'disabled' : ''; ?>>
                                         ✏️ Editor
                                     </button>
-                                    <button type="submit" name="papel" value="admin" 
+                                    <button type="button" 
+                                            onclick="confirmarAlteracaoPapel(<?php echo $user['id']; ?>, 'admin', '<?php echo addslashes($user['nome']); ?>')"
                                             class="btn btn-role btn-sm" 
                                             style="background: #667eea; color: white;"
                                             <?php echo $user['papel'] === 'admin' ? 'disabled' : ''; ?>>
@@ -222,34 +253,37 @@ $usuarios = json_decode(file_get_contents('../data/usuarios.json'), true) ?? [];
                             
                             <!-- Suspender/Reativar -->
                             <?php if (!$suspenso): ?>
-                                <form method="POST" class="mt-3" onsubmit="return confirmarSuspensao('<?php echo htmlspecialchars($user['nome']); ?>', this.duracao.options[this.duracao.selectedIndex].text)">
+                                <form method="POST" class="mt-3" id="form-suspender-<?php echo $user['id']; ?>">
                                     <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                                     <input type="hidden" name="suspender" value="1">
                                     <label class="form-label fw-bold">Suspender por:</label>
                                     <div class="row g-2">
                                         <div class="col-md-8">
-                                            <select name="duracao" class="form-select" required>
+                                            <select name="duracao" class="form-select" required id="duracao-<?php echo $user['id']; ?>">
                                                 <option value="1 day">1 dia</option>
                                                 <option value="1 week">1 semana</option>
                                                 <option value="1 month">1 mês</option>
                                                 <option value="3 months">3 meses</option>
                                                 <option value="6 months">6 meses</option>
-                                                <option value="9 months">9 meses</option>
                                                 <option value="1 year">1 ano</option>
                                             </select>
                                         </div>
                                         <div class="col-md-4">
-                                            <button type="submit" class="btn btn-danger w-100">
+                                            <button type="button" 
+                                                    onclick="confirmarSuspensao(<?php echo $user['id']; ?>, '<?php echo addslashes($user['nome']); ?>')" 
+                                                    class="btn btn-danger w-100">
                                                 🚫 Suspender
                                             </button>
                                         </div>
                                     </div>
                                 </form>
                             <?php else: ?>
-                                <form method="POST" class="mt-3" onsubmit="return confirmarReativacao('<?php echo htmlspecialchars($user['nome']); ?>')">
+                                <form method="POST" class="mt-3" id="form-reativar-<?php echo $user['id']; ?>">
                                     <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                                     <input type="hidden" name="reativar" value="1">
-                                    <button type="submit" class="btn btn-success w-100">
+                                    <button type="button" 
+                                            onclick="confirmarReativacao(<?php echo $user['id']; ?>, '<?php echo addslashes($user['nome']); ?>')" 
+                                            class="btn btn-success w-100">
                                         ✅ Reativar Usuário
                                     </button>
                                 </form>
@@ -267,20 +301,46 @@ $usuarios = json_decode(file_get_contents('../data/usuarios.json'), true) ?? [];
 </main>
 
 <script>
-function confirmarAlteracaoPapel(nomeUsuario, novoPapel) {
+function confirmarAlteracaoPapel(userId, novoPapel, nomeUsuario) {
     const papelFormatado = novoPapel === 'usuario' ? 'Usuário' : (novoPapel === 'editor' ? 'Editor' : 'Administrador');
-    const mensagem = `⚠️ Tem certeza que deseja alterar o papel de "${nomeUsuario}" para "${papelFormatado}"?\n\nEsta ação mudará as permissões do usuário no sistema.`;
-    return confirm(mensagem);
+    const icone = novoPapel === 'usuario' ? '👤' : (novoPapel === 'editor' ? '✏️' : '👑');
+    
+    const mensagem = `${icone} ALTERAR PAPEL DE USUÁRIO\n\n` +
+                     `Tem certeza que deseja alterar o papel de:\n\n` +
+                     `📌 Usuário: ${nomeUsuario}\n` +
+                     `🔄 Novo papel: ${papelFormatado}\n\n` +
+                     `Esta ação mudará as permissões do usuário no sistema.`;
+    
+    if (confirm(mensagem)) {
+        document.getElementById('papel-input-' + userId).value = novoPapel;
+        document.getElementById('form-papel-' + userId).submit();
+    }
 }
 
-function confirmarSuspensao(nomeUsuario, duracao) {
-    const mensagem = `⚠️ Tem certeza que deseja suspender "${nomeUsuario}" por ${duracao}?\n\nO usuário não poderá acessar o sistema durante este período.`;
-    return confirm(mensagem);
+function confirmarSuspensao(userId, nomeUsuario) {
+    const select = document.getElementById('duracao-' + userId);
+    const duracao = select.options[select.selectedIndex].text;
+    
+    const mensagem = `🚫 SUSPENDER USUÁRIO\n\n` +
+                     `Tem certeza que deseja suspender:\n\n` +
+                     `📌 Usuário: ${nomeUsuario}\n` +
+                     `⏰ Duração: ${duracao}\n\n` +
+                     `O usuário não poderá acessar o sistema durante este período.`;
+    
+    if (confirm(mensagem)) {
+        document.getElementById('form-suspender-' + userId).submit();
+    }
 }
 
-function confirmarReativacao(nomeUsuario) {
-    const mensagem = `✅ Tem certeza que deseja reativar a conta de "${nomeUsuario}"?\n\nO usuário voltará a ter acesso completo ao sistema.`;
-    return confirm(mensagem);
+function confirmarReativacao(userId, nomeUsuario) {
+    const mensagem = `✅ REATIVAR USUÁRIO\n\n` +
+                     `Tem certeza que deseja reativar:\n\n` +
+                     `📌 Usuário: ${nomeUsuario}\n\n` +
+                     `O usuário voltará a ter acesso completo ao sistema.`;
+    
+    if (confirm(mensagem)) {
+        document.getElementById('form-reativar-' + userId).submit();
+    }
 }
 </script>
 
