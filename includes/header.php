@@ -189,7 +189,7 @@ if (usuarioLogado()) {
             box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
         }
         
-        /* Notificações Badge - MELHORADO */
+        /* Notificações Badge - MOBILE FORA DO MENU */
         .notifications-bell {
             position: relative;
             color: white;
@@ -202,7 +202,6 @@ if (usuarioLogado()) {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
             text-decoration: none;
             width: 45px;
             height: 45px;
@@ -296,7 +295,7 @@ if (usuarioLogado()) {
             width: 20px;
         }
         
-        /* Hamburger Menu Animado - MELHORADO */
+        /* Hamburger Menu Animado */
         .navbar-toggler {
             border: none;
             padding: 5px;
@@ -375,10 +374,26 @@ if (usuarioLogado()) {
             left: 50%;
         }
         
+        /* Mobile: Sino FORA do menu */
+        .mobile-notifications {
+            display: none;
+        }
+        
         /* Mobile Adjustments */
         @media (max-width: 991px) {
             body {
                 padding-top: 70px;
+            }
+            
+            /* Sino aparece no mobile */
+            .mobile-notifications {
+                display: block;
+                margin-right: 10px;
+            }
+            
+            /* Sino some no desktop dentro do menu */
+            .navbar-collapse .notifications-bell {
+                display: none;
             }
             
             .navbar-collapse {
@@ -401,17 +416,13 @@ if (usuarioLogado()) {
             }
             
             .nav-link {
-                padding: 10px 0;
+                padding: 12px 0;
+                margin: 5px 0;
             }
             
             .btn-login, .btn-register {
                 width: 100%;
                 margin: 10px 0;
-            }
-            
-            .notifications-bell {
-                margin-right: 10px;
-                margin-bottom: 0;
             }
             
             .user-dropdown-mobile {
@@ -426,7 +437,7 @@ if (usuarioLogado()) {
                 padding: 15px;
                 background: rgba(255, 255, 255, 0.1);
                 border-radius: 10px;
-                margin-bottom: 10px;
+                margin-bottom: 15px;
             }
             
             .user-info-mobile img {
@@ -447,6 +458,10 @@ if (usuarioLogado()) {
             .user-dropdown-mobile {
                 display: none;
             }
+            
+            .mobile-notifications {
+                display: none;
+            }
         }
         
         @media (max-width: 991px) {
@@ -464,14 +479,26 @@ if (usuarioLogado()) {
                 Blog Acadêmico
             </a>
             
-            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-expanded="false">
-                <span class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </span>
-            </button>
+            <div class="d-flex align-items-center d-lg-none">
+                <?php if (usuarioLogado()): ?>
+                    <!-- Sino FORA do menu hamburguer (Mobile) -->
+                    <a href="<?php echo getBasePath(); ?>backend/notificacoes.php" class="notifications-bell mobile-notifications" title="Notificações">
+                        <i class="bi bi-bell-fill"></i>
+                        <?php if ($notificacoesNaoLidas > 0): ?>
+                            <span class="notification-badge"><?php echo $notificacoesNaoLidas > 99 ? '99+' : $notificacoesNaoLidas; ?></span>
+                        <?php endif; ?>
+                    </a>
+                <?php endif; ?>
+                
+                <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-expanded="false">
+                    <span class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </button>
+            </div>
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
@@ -489,8 +516,8 @@ if (usuarioLogado()) {
                 
                 <div class="d-flex align-items-center">
                     <?php if (usuarioLogado()): ?>
-                        <!-- Ícone de Notificações -->
-                        <a href="<?php echo getBasePath(); ?>backend/notificacoes.php" class="notifications-bell" title="Notificações">
+                        <!-- Sino no Desktop -->
+                        <a href="<?php echo getBasePath(); ?>backend/notificacoes.php" class="notifications-bell d-none d-lg-flex" title="Notificações">
                             <i class="bi bi-bell-fill"></i>
                             <?php if ($notificacoesNaoLidas > 0): ?>
                                 <span class="notification-badge"><?php echo $notificacoesNaoLidas > 99 ? '99+' : $notificacoesNaoLidas; ?></span>
@@ -522,6 +549,11 @@ if (usuarioLogado()) {
                                     <li>
                                         <a class="dropdown-item" href="<?php echo getBasePath(); ?>backend/painelAdmin.php">
                                             <i class="bi bi-speedometer2"></i> Dashboard Admin
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="<?php echo getBasePath(); ?>backend/denuncias.php">
+                                            <i class="bi bi-flag-fill"></i> Denúncias
                                         </a>
                                     </li>
                                 <?php elseif (ehEditor()): ?>
@@ -558,6 +590,9 @@ if (usuarioLogado()) {
                             <?php if (ehAdmin()): ?>
                                 <a class="nav-link" href="<?php echo getBasePath(); ?>backend/painelAdmin.php">
                                     <i class="bi bi-speedometer2"></i> Dashboard Admin
+                                </a>
+                                <a class="nav-link" href="<?php echo getBasePath(); ?>backend/denuncias.php">
+                                    <i class="bi bi-flag-fill"></i> Denúncias
                                 </a>
                             <?php elseif (ehEditor()): ?>
                                 <a class="nav-link" href="<?php echo getBasePath(); ?>backend/painelEditor.php">
