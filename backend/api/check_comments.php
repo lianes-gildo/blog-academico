@@ -1,0 +1,40 @@
+<?php
+session_start();
+header('Content-Type: application/json');
+
+$postId = isset($_GET['post_id']) ? (int)$_GET['post_id'] : 0;
+$lastCheck = isset($_GET['last_check']) ? (int)$_GET['last_check'] : 0;
+
+if ($postId == 0) {
+    echo json_encode(['hasNew' => false]);
+    exit;
+}
+
+$arquivoComentarios = __DIR__ . '/../../data/comentarios.json';
+
+if (!file_exists($arquivoComentarios)) {
+    echo json_encode(['hasNew' => false]);
+    exit;
+}
+
+$comentarios = json_decode(file_get_contents($arquivoComentarios), true);
+
+if (!is_array($comentarios)) {
+    echo json_encode(['hasNew' => false]);
+    exit;
+}
+
+// Verificar se há comentários novos
+$hasNew = false;
+foreach ($comentarios as $c) {
+    if ($c['artigo_id'] == $postId && $c['data'] > $lastCheck) {
+        $hasNew = true;
+        break;
+    }
+}
+
+echo json_encode([
+    'hasNew' => $hasNew,
+    'timestamp' => time()
+]);
+?>

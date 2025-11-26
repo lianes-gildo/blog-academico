@@ -9,40 +9,6 @@ if (!usuarioLogado()) {
 
 $usuarioId = $_SESSION['usuario_id'];
 
-// Marcar notificações como lidas se solicitado
-if (isset($_GET['marcar_lidas'])) {
-    $arquivoNotif = '../data/notificacoes.json';
-    if (file_exists($arquivoNotif)) {
-        $notificacoes = json_decode(file_get_contents($arquivoNotif), true);
-        foreach ($notificacoes as &$n) {
-            if ($n['usuario_destino_id'] == $usuarioId) {
-                $n['lida'] = true;
-            }
-        }
-        file_put_contents($arquivoNotif, json_encode($notificacoes, JSON_PRETTY_PRINT));
-    }
-    header('Location: notificacoes.php');
-    exit;
-}
-
-// Marcar notificação específica como lida
-if (isset($_GET['marcar_lida'])) {
-    $notifId = (int)$_GET['marcar_lida'];
-    $arquivoNotif = '../data/notificacoes.json';
-    if (file_exists($arquivoNotif)) {
-        $notificacoes = json_decode(file_get_contents($arquivoNotif), true);
-        foreach ($notificacoes as &$n) {
-            if ($n['id'] == $notifId) {
-                $n['lida'] = true;
-                break;
-            }
-        }
-        file_put_contents($arquivoNotif, json_encode($notificacoes, JSON_PRETTY_PRINT));
-    }
-    header('Location: notificacoes.php');
-    exit;
-}
-
 // Obter notificações
 $arquivoNotif = '../data/notificacoes.json';
 $todasNotificacoes = [];
@@ -62,7 +28,6 @@ if (file_exists($arquivoNotif)) {
     }
 }
 
-// Ordenar por data (mais recente primeiro)
 usort($todasNotificacoes, function($a, $b) {
     return $b['data'] - $a['data'];
 });
@@ -84,14 +49,8 @@ usort($todasNotificacoes, function($a, $b) {
     }
     
     @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     
     .notifications-stats {
@@ -118,27 +77,6 @@ usort($todasNotificacoes, function($a, $b) {
         animation: slideInUp 0.6s ease;
     }
     
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .notifications-actions {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        flex-wrap: wrap;
-        gap: 15px;
-    }
-    
-    /* PESQUISA ADAPTATIVA */
     .search-box {
         flex: 1;
         min-width: 250px;
@@ -170,7 +108,6 @@ usort($todasNotificacoes, function($a, $b) {
         transform: translateY(-50%);
         color: #888;
         font-size: 1.3rem;
-        pointer-events: none;
     }
     
     .btn-mark-all {
@@ -181,10 +118,10 @@ usort($todasNotificacoes, function($a, $b) {
         border: none;
         font-weight: 600;
         transition: all 0.3s ease;
-        white-space: nowrap;
         display: flex;
         align-items: center;
         gap: 10px;
+        cursor: pointer;
     }
     
     .btn-mark-all:hover {
@@ -203,22 +140,6 @@ usort($todasNotificacoes, function($a, $b) {
         background: #f8f9fa;
         cursor: pointer;
         position: relative;
-        overflow: hidden;
-    }
-    
-    .notification-item::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.1), transparent);
-        transition: left 0.5s ease;
-    }
-    
-    .notification-item:hover::before {
-        left: 100%;
     }
     
     .notification-item:hover {
@@ -233,18 +154,6 @@ usort($todasNotificacoes, function($a, $b) {
         box-shadow: 0 3px 10px rgba(255, 107, 53, 0.15);
     }
     
-    .notification-item.unread::after {
-        content: '';
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        width: 12px;
-        height: 12px;
-        background: var(--primary-orange);
-        border-radius: 50%;
-        animation: pulse 2s infinite;
-    }
-    
     .notification-icon {
         width: 65px;
         height: 65px;
@@ -254,74 +163,12 @@ usort($todasNotificacoes, function($a, $b) {
         justify-content: center;
         font-size: 2rem;
         flex-shrink: 0;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
     }
     
-    .icon-mention {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-    }
-    
-    .icon-like {
-        background: linear-gradient(135deg, #fa709a, #fee140);
-    }
-    
-    .icon-dislike {
-        background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
-    }
-    
-    .icon-reply {
-        background: linear-gradient(135deg, #4facfe, #00f2fe);
-    }
-    
-    .notification-content {
-        flex: 1;
-    }
-    
-    .notification-text {
-        font-size: 1.05rem;
-        color: #333;
-        margin-bottom: 10px;
-        line-height: 1.6;
-    }
-    
-    .notification-text strong {
-        color: var(--primary-blue);
-        font-weight: 700;
-    }
-    
-    .notification-post {
-        color: var(--primary-orange);
-        font-weight: 600;
-        font-size: 1rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 10px;
-    }
-    
-    .notification-meta {
-        display: flex;
-        gap: 20px;
-        font-size: 0.9rem;
-        color: #888;
-        flex-wrap: wrap;
-    }
-    
-    .notification-time {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-    
-    .notification-badge {
-        background: var(--primary-orange);
-        color: white;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        animation: pulse 1.5s ease infinite;
-    }
+    .icon-mention { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .icon-like { background: linear-gradient(135deg, #fa709a, #fee140); }
+    .icon-dislike { background: linear-gradient(135deg, #ff6b6b, #ee5a6f); }
+    .icon-reply { background: linear-gradient(135deg, #4facfe, #00f2fe); }
     
     .empty-state {
         text-align: center;
@@ -331,64 +178,11 @@ usort($todasNotificacoes, function($a, $b) {
     .empty-icon {
         font-size: 6rem;
         margin-bottom: 25px;
-        animation: float 3s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-20px); }
-    }
-    
-    .no-results {
-        text-align: center;
-        padding: 60px 20px;
-        display: none;
-    }
-    
-    .no-results-icon {
-        font-size: 4rem;
-        margin-bottom: 20px;
-        opacity: 0.5;
     }
     
     @media (max-width: 768px) {
-        .notifications-container {
-            padding: 25px 20px;
-        }
-        
-        .notifications-title {
-            font-size: 2rem;
-        }
-        
-        .notifications-actions {
-            flex-direction: column;
-        }
-        
-        .search-box {
-            width: 100%;
-            max-width: 100%;
-        }
-        
-        .btn-mark-all {
-            width: 100%;
-            justify-content: center;
-        }
-        
-        .notification-item {
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .notification-icon {
-            width: 55px;
-            height: 55px;
-            font-size: 1.7rem;
-        }
-        
-        .notification-meta {
-            flex-direction: column;
-            gap: 8px;
-        }
+        .notifications-container { padding: 25px 20px; }
+        .notification-item { flex-direction: column; }
     }
 </style>
 
@@ -396,32 +190,25 @@ usort($todasNotificacoes, function($a, $b) {
     <div class="container">
         <h1 class="notifications-title">🔔 Central de Notificações</h1>
         <div class="notifications-stats">
-            <span class="stat-badge">
-                📬 Total: <?php echo count($todasNotificacoes); ?>
-            </span>
-            <span class="stat-badge">
-                ✨ Não Lidas: <?php echo count($naoLidas); ?>
-            </span>
+            <span class="stat-badge">📬 Total: <span id="total-count"><?php echo count($todasNotificacoes); ?></span></span>
+            <span class="stat-badge">✨ Não Lidas: <span id="unread-count"><?php echo count($naoLidas); ?></span></span>
         </div>
     </div>
 </div>
 
 <main class="container pb-5">
     <div class="notifications-container">
-        <div class="notifications-actions">
+        <div class="notifications-actions" style="display: flex; justify-content: space-between; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
             <div class="search-box">
-                <input type="text" 
-                       id="searchInput" 
-                       placeholder="🔍 Pesquisar notificações..." 
-                       autocomplete="off">
+                <input type="text" id="searchInput" placeholder="🔍 Pesquisar notificações..." autocomplete="off">
                 <i class="bi bi-search search-icon"></i>
             </div>
             
             <?php if (count($naoLidas) > 0): ?>
-                <a href="?marcar_lidas=1" class="btn-mark-all">
+                <button onclick="marcarTodasLidas()" class="btn-mark-all" id="btnMarkAll">
                     <i class="bi bi-check-all"></i> 
                     <span>Marcar Todas como Lidas</span>
-                </a>
+                </button>
             <?php endif; ?>
         </div>
         
@@ -461,9 +248,6 @@ usort($todasNotificacoes, function($a, $b) {
                             break;
                     }
                     
-                    $dataFormatada = date('d/m/Y', $notif['data']);
-                    $horaFormatada = date('H:i', $notif['data']);
-                    
                     $diferenca = time() - $notif['data'];
                     if ($diferenca < 60) {
                         $tempoDecorrido = 'Agora mesmo';
@@ -477,89 +261,81 @@ usort($todasNotificacoes, function($a, $b) {
                         $dias = floor($diferenca / 86400);
                         $tempoDecorrido = "Há {$dias} " . ($dias == 1 ? 'dia' : 'dias');
                     }
-                    
-                    $searchData = strtolower($notif['usuario_origem_nome'] . ' ' . $notif['post_titulo'] . ' ' . $texto);
                 ?>
                     <div class="notification-item <?php echo !$notif['lida'] ? 'unread' : ''; ?>" 
-                         data-search="<?php echo htmlspecialchars($searchData); ?>"
-                         onclick="window.location.href='../artigo.php?id=<?php echo $notif['post_id']; ?>#comment-<?php echo $notif['comentario_id']; ?>'">
-                        <div class="notification-icon <?php echo $classe; ?>">
-                            <?php echo $icone; ?>
-                        </div>
+                         data-notif-id="<?php echo $notif['id']; ?>"
+                         onclick="abrirNotificacao(<?php echo $notif['id']; ?>, <?php echo $notif['post_id']; ?>, <?php echo $notif['comentario_id']; ?>, <?php echo !$notif['lida'] ? 'true' : 'false'; ?>)">
+                        <div class="notification-icon <?php echo $classe; ?>"><?php echo $icone; ?></div>
                         <div class="notification-content">
-                            <p class="notification-text"><?php echo $texto; ?></p>
-                            <div class="notification-post">
-                                <i class="bi bi-file-text-fill"></i> 
-                                <?php echo htmlspecialchars($notif['post_titulo']); ?>
+                            <p class="notification-text" style="font-size: 1.05rem; margin-bottom: 10px;"><?php echo $texto; ?></p>
+                            <div style="color: var(--primary-orange); font-weight: 600; margin-bottom: 10px;">
+                                <i class="bi bi-file-text-fill"></i> <?php echo htmlspecialchars($notif['post_titulo']); ?>
                             </div>
-                            <div class="notification-meta">
-                                <span class="notification-time">
-                                    <i class="bi bi-clock-fill"></i> <?php echo $tempoDecorrido; ?>
-                                </span>
-                                <span>
-                                    <i class="bi bi-calendar-fill"></i> <?php echo $dataFormatada; ?> às <?php echo $horaFormatada; ?>
-                                </span>
-                                <?php if (!$notif['lida']): ?>
-                                    <span class="notification-badge">NOVO</span>
-                                <?php endif; ?>
+                            <div style="font-size: 0.9rem; color: #888;">
+                                <i class="bi bi-clock-fill"></i> <?php echo $tempoDecorrido; ?>
                             </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
-        
-        <!-- Mensagem quando não há resultados na pesquisa -->
-        <div class="no-results" id="noResults">
-            <div class="no-results-icon">🔍</div>
-            <h4>Nenhuma notificação encontrada</h4>
-            <p class="text-muted">Tente pesquisar com outros termos</p>
-        </div>
     </div>
 </main>
 
 <script>
-// PESQUISA EM TEMPO REAL ADAPTATIVA
-const searchInput = document.getElementById('searchInput');
-const notificationsList = document.getElementById('notificationsList');
-const noResults = document.getElementById('noResults');
-
-if (searchInput) {
-    // Focar automaticamente no campo de pesquisa em desktop
-    if (window.innerWidth > 768) {
-        searchInput.focus();
-    }
-    
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase().trim();
-        const notifications = notificationsList.querySelectorAll('.notification-item');
-        let hasResults = false;
-        
-        notifications.forEach(notification => {
-            const searchData = notification.getAttribute('data-search');
+// Marcar todas as notificações como lidas (SEM RECARREGAR)
+function marcarTodasLidas() {
+    fetch('../backend/api/mark_notifications.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'action=mark_all'
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            // Remover classe unread de todas
+            document.querySelectorAll('.notification-item.unread').forEach(item => {
+                item.classList.remove('unread');
+            });
             
-            if (searchTerm === '' || searchData.includes(searchTerm)) {
-                notification.style.display = 'flex';
-                hasResults = true;
-            } else {
-                notification.style.display = 'none';
-            }
-        });
-        
-        // Mostrar mensagem se não houver resultados
-        if (!hasResults && searchTerm !== '') {
-            noResults.style.display = 'block';
-        } else {
-            noResults.style.display = 'none';
+            // Atualizar contadores
+            document.getElementById('unread-count').textContent = '0';
+            
+            // Esconder botão
+            const btn = document.getElementById('btnMarkAll');
+            if (btn) btn.style.display = 'none';
+            
+            // Atualizar badges do header
+            const mobileBadge = document.getElementById('mobile-badge');
+            const desktopBadge = document.getElementById('desktop-badge');
+            if (mobileBadge) mobileBadge.style.display = 'none';
+            if (desktopBadge) desktopBadge.style.display = 'none';
         }
     });
+}
+
+// Marcar uma notificação como lida e abrir
+function abrirNotificacao(notifId, postId, comentarioId, isUnread) {
+    if (isUnread) {
+        fetch('../backend/api/mark_notifications.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=mark_one&notif_id=' + notifId
+        });
+    }
     
-    // Limpar pesquisa ao pressionar ESC
-    searchInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            this.value = '';
-            this.dispatchEvent(new Event('input'));
-        }
+    window.location.href = '../artigo.php?id=' + postId + '#comment-' + comentarioId;
+}
+
+// Pesquisa
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+    searchInput.addEventListener('input', function() {
+        const term = this.value.toLowerCase();
+        document.querySelectorAll('.notification-item').forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(term) ? 'flex' : 'none';
+        });
     });
 }
 </script>

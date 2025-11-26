@@ -7,7 +7,8 @@
         "comentario_id": 1,
         "likes": [
             4,
-            5
+            5,
+            7
         ],
         "dislikes": []
     },
@@ -204,6 +205,94 @@
         "comentario": "@Chiquinho claramente.",
         "data": 1763966536,
         "pai_id": 13,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 20,
+        "artigo_id": 9,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "@Lianes Nhacula mauuuu",
+        "data": 1764109947,
+        "pai_id": 1,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 21,
+        "artigo_id": 8,
+        "nome": "Lianes Nhacula",
+        "usuario_id": 4,
+        "comentario": "Vamosssss",
+        "data": 1764110168,
+        "likes": [
+            7,
+            4
+        ],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 22,
+        "artigo_id": 8,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "@Lianes Nhacula Vamos!!!!!!!!!!!!!",
+        "data": 1764110256,
+        "pai_id": 21,
+        "likes": [
+            4
+        ],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 23,
+        "artigo_id": 8,
+        "nome": "Lianes Nhacula",
+        "usuario_id": 4,
+        "comentario": "@Chiquinho great",
+        "data": 1764110295,
+        "pai_id": 22,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 24,
+        "artigo_id": 5,
+        "nome": "Lianes Nhacula",
+        "usuario_id": 4,
+        "comentario": "ok",
+        "data": 1764131322,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 25,
+        "artigo_id": 5,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "nao",
+        "data": 1764131335,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 26,
+        "artigo_id": 5,
+        "nome": "Lianes Nhacula",
+        "usuario_id": 4,
+        "comentario": "hah",
+        "data": 1764131413,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 27,
+        "artigo_id": 5,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "claro",
+        "data": 1764131425,
         "likes": [],
         "dislikes": []
     }

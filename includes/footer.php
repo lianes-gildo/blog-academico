@@ -84,7 +84,7 @@
                             <h5 class="footer-title">🌐 Conecte-se</h5>
                             <p class="footer-contact mb-3">
                                 <i class="bi bi-envelope-fill"></i>
-                                <a href="mailto:contato@blogacademico.co.mz">contato@blogacademico.co.mz</a>
+                                <a href="mailto:lndigitalcraft@gmail.com">lndigitalcraft@gmail.com</a>
                             </p>
                             <p class="footer-contact mb-4">
                                 <i class="bi bi-geo-alt-fill"></i>
@@ -100,12 +100,6 @@
                                 </a>
                                 <a href="#" class="social-icon-footer instagram" title="Instagram">
                                     <i class="bi bi-instagram"></i>
-                                </a>
-                                <a href="#" class="social-icon-footer linkedin" title="LinkedIn">
-                                    <i class="bi bi-linkedin"></i>
-                                </a>
-                                <a href="#" class="social-icon-footer youtube" title="YouTube">
-                                    <i class="bi bi-youtube"></i>
                                 </a>
                             </div>
                         </div>

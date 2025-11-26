@@ -225,7 +225,7 @@
                     </li>
                     <li>
                         <strong>👥 Papéis de Usuário:</strong> Sistema com diferentes níveis de 
-                        acesso (Usuário, Editor, Administrador).
+                        acesso (Usuário, Editor).
                     </li>
                 </ul>
             </div>

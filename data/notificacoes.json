@@ -20,5 +20,82 @@
         "post_titulo": "Como Montar um Portf\u00f3lio Acad\u00eamico",
         "data": 1763965359,
         "lida": true
+    },
+    {
+        "id": 3,
+        "tipo": "reply",
+        "usuario_destino_id": 4,
+        "usuario_origem_nome": "Chiquinho",
+        "comentario_id": 1,
+        "post_id": 9,
+        "post_titulo": "Como Montar um Portf\u00f3lio Acad\u00eamico Profissional",
+        "data": 1764109947,
+        "lida": true
+    },
+    {
+        "id": 4,
+        "tipo": "like",
+        "usuario_destino_id": 4,
+        "usuario_origem_nome": "Chiquinho",
+        "comentario_id": 1,
+        "post_id": 9,
+        "post_titulo": "Como Montar um Portf\u00f3lio Acad\u00eamico Profissional",
+        "data": 1764109949,
+        "lida": true
+    },
+    {
+        "id": 5,
+        "tipo": "like",
+        "usuario_destino_id": 4,
+        "usuario_origem_nome": "Chiquinho",
+        "comentario_id": 21,
+        "post_id": 8,
+        "post_titulo": "Leitura Cr\u00edtica de Artigos Cient\u00edficos",
+        "data": 1764110206,
+        "lida": true
+    },
+    {
+        "id": 6,
+        "tipo": "reply",
+        "usuario_destino_id": 4,
+        "usuario_origem_nome": "Chiquinho",
+        "comentario_id": 21,
+        "post_id": 8,
+        "post_titulo": "Leitura Cr\u00edtica de Artigos Cient\u00edficos",
+        "data": 1764110256,
+        "lida": true
+    },
+    {
+        "id": 7,
+        "tipo": "like",
+        "usuario_destino_id": 7,
+        "usuario_origem_nome": "Lianes Nhacula",
+        "comentario_id": 22,
+        "post_id": 8,
+        "post_titulo": "Leitura Cr\u00edtica de Artigos Cient\u00edficos",
+        "data": 1764110268,
+        "lida": false
+    },
+    {
+        "id": 8,
+        "tipo": "reply",
+        "usuario_destino_id": 7,
+        "usuario_origem_nome": "Lianes Nhacula",
+        "comentario_id": 22,
+        "post_id": 8,
+        "post_titulo": "Leitura Cr\u00edtica de Artigos Cient\u00edficos",
+        "data": 1764110295,
+        "lida": true
+    },
+    {
+        "id": 9,
+        "tipo": "mention",
+        "usuario_destino_id": 7,
+        "usuario_origem_nome": "Lianes Nhacula",
+        "comentario_id": 23,
+        "post_id": 8,
+        "post_titulo": "Leitura Cr\u00edtica de Artigos Cient\u00edficos",
+        "data": 1764110295,
+        "lida": false
     }
 ]

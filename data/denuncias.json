@@ -1,0 +1,47 @@
+[
+    {
+        "id": 1,
+        "comentario_id": 11,
+        "artigo_id": 9,
+        "comentario_texto": "blablabla",
+        "comentario_autor": "Chiquinho",
+        "comentario_autor_id": 7,
+        "denunciante_id": 4,
+        "denunciante_nome": "Lianes Nhacula",
+        "motivo": "spam",
+        "motivo_texto": "Spam ou Publicidade",
+        "data": 1764130590,
+        "status": "pendente",
+        "expira_em": 1764735390
+    },
+    {
+        "id": 2,
+        "comentario_id": 17,
+        "artigo_id": 8,
+        "comentario_texto": "sempre",
+        "comentario_autor": "Lupin",
+        "comentario_autor_id": 5,
+        "denunciante_id": 7,
+        "denunciante_nome": "Chiquinho",
+        "motivo": "conteudo_inapropriado",
+        "motivo_texto": "Conte\u00fado Inapropriado",
+        "data": 1764131522,
+        "status": "pendente",
+        "expira_em": 1764736322
+    },
+    {
+        "id": 3,
+        "comentario_id": 17,
+        "artigo_id": 8,
+        "comentario_texto": "sempre",
+        "comentario_autor": "Lupin",
+        "comentario_autor_id": 5,
+        "denunciante_id": 7,
+        "denunciante_nome": "Chiquinho",
+        "motivo": "informacao_falsa",
+        "motivo_texto": "Informa\u00e7\u00e3o Falsa",
+        "data": 1764131605,
+        "status": "pendente",
+        "expira_em": 1764736405
+    }
+]
