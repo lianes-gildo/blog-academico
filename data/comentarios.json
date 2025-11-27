@@ -154,50 +154,6 @@
         "dislikes": []
     },
     {
-        "comentario_id": 15,
-        "artigo_id": 8,
-        "nome": "Chiquinho",
-        "usuario_id": 7,
-        "comentario": "claro que simmmmmmm",
-        "data": 1763965272,
-        "pai_id": 14,
-        "likes": [],
-        "dislikes": []
-    },
-    {
-        "comentario_id": 16,
-        "artigo_id": 8,
-        "nome": "Chiquinho",
-        "usuario_id": 7,
-        "comentario": "claro que sim",
-        "data": 1763965293,
-        "pai_id": 14,
-        "likes": [],
-        "dislikes": []
-    },
-    {
-        "comentario_id": 17,
-        "artigo_id": 8,
-        "nome": "Lupin",
-        "usuario_id": 5,
-        "comentario": "sempre",
-        "data": 1763965359,
-        "pai_id": 15,
-        "likes": [],
-        "dislikes": []
-    },
-    {
-        "comentario_id": 18,
-        "artigo_id": 8,
-        "nome": "Lupin",
-        "usuario_id": 5,
-        "comentario": "blabla",
-        "data": 1763965383,
-        "pai_id": 16,
-        "likes": [],
-        "dislikes": []
-    },
-    {
         "comentario_id": 19,
         "artigo_id": 9,
         "nome": "Chiquinho",
@@ -233,40 +189,6 @@
         "dislikes": []
     },
     {
-        "comentario_id": 22,
-        "artigo_id": 8,
-        "nome": "Chiquinho",
-        "usuario_id": 7,
-        "comentario": "@Lianes Nhacula Vamos!!!!!!!!!!!!!",
-        "data": 1764110256,
-        "pai_id": 21,
-        "likes": [
-            4
-        ],
-        "dislikes": []
-    },
-    {
-        "comentario_id": 23,
-        "artigo_id": 8,
-        "nome": "Lianes Nhacula",
-        "usuario_id": 4,
-        "comentario": "@Chiquinho great",
-        "data": 1764110295,
-        "pai_id": 22,
-        "likes": [],
-        "dislikes": []
-    },
-    {
-        "comentario_id": 24,
-        "artigo_id": 5,
-        "nome": "Lianes Nhacula",
-        "usuario_id": 4,
-        "comentario": "ok",
-        "data": 1764131322,
-        "likes": [],
-        "dislikes": []
-    },
-    {
         "comentario_id": 25,
         "artigo_id": 5,
         "nome": "Chiquinho",
@@ -293,6 +215,53 @@
         "usuario_id": 7,
         "comentario": "claro",
         "data": 1764131425,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 28,
+        "artigo_id": 1,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "Great",
+        "data": 1764225348,
+        "likes": [
+            4
+        ],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 29,
+        "artigo_id": 1,
+        "nome": "Lianes Nhacula",
+        "usuario_id": 4,
+        "comentario": "@Chiquinho Nice",
+        "data": 1764225379,
+        "pai_id": 28,
+        "likes": [
+            7
+        ],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 30,
+        "artigo_id": 2,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "Vamos a isso",
+        "data": 1764227026,
+        "likes": [
+            4
+        ],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 31,
+        "artigo_id": 5,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "ola",
+        "data": 1764271246,
         "likes": [],
         "dislikes": []
     }

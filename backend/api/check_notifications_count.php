@@ -1,3 +1,7 @@
+// ========================================
+// 9. backend/api/check_notifications_count.php
+// Conta notificações não lidas (real-time)
+// ========================================
 <?php
 session_start();
 header('Content-Type: application/json');
@@ -8,7 +12,6 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 $arquivoNotif = __DIR__ . '/../../data/notificacoes.json';
-
 if (!file_exists($arquivoNotif)) {
     echo json_encode(['count' => 0]);
     exit;
@@ -19,12 +22,13 @@ $count = 0;
 
 if (is_array($notificacoes)) {
     foreach ($notificacoes as $n) {
-        if ($n['usuario_destino_id'] == $_SESSION['usuario_id'] && 
-            (!isset($n['lida']) || $n['lida'] === false)) {
+        if ($n['usuario_destino_id'] == $_SESSION['usuario_id'] && (!isset($n['lida']) || $n['lida'] === false)) {
             $count++;
         }
     }
 }
 
-echo json_encode(['count' => $count]);
-?>
+echo json_encode([
+    'count' => $count,
+    'timestamp' => time()
+]);

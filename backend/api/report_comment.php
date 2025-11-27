@@ -1,3 +1,7 @@
+// ========================================
+// 4. backend/api/report_comment.php
+// Denuncia um comentário
+// ========================================
 <?php
 session_start();
 header('Content-Type: application/json');
@@ -17,15 +21,7 @@ if ($comentarioId == 0 || empty($motivo)) {
 }
 
 // Validar motivo
-$motivosValidos = [
-    'spam',
-    'discurso_odio',
-    'assedio',
-    'conteudo_inapropriado',
-    'informacao_falsa',
-    'outro'
-];
-
+$motivosValidos = ['spam', 'discurso_odio', 'assedio', 'conteudo_inapropriado', 'informacao_falsa', 'outro'];
 if (!in_array($motivo, $motivosValidos)) {
     echo json_encode(['success' => false, 'message' => 'Motivo inválido']);
     exit;
@@ -35,18 +31,6 @@ if (!in_array($motivo, $motivosValidos)) {
 if ($motivo === 'outro' && (empty($outro) || strlen($outro) > 200)) {
     echo json_encode(['success' => false, 'message' => 'Descrição inválida (máx 200 caracteres)']);
     exit;
-}
-
-$arquivoDenuncias = __DIR__ . '/../../data/denuncias.json';
-
-if (!file_exists($arquivoDenuncias)) {
-    file_put_contents($arquivoDenuncias, '[]');
-}
-
-$denuncias = json_decode(file_get_contents($arquivoDenuncias), true);
-
-if (!is_array($denuncias)) {
-    $denuncias = [];
 }
 
 // Obter informações do comentário
@@ -67,6 +51,17 @@ if (!$comentario) {
 }
 
 // Criar denúncia
+$arquivoDenuncias = __DIR__ . '/../../data/denuncias.json';
+if (!file_exists($arquivoDenuncias)) {
+    file_put_contents($arquivoDenuncias, '[]');
+}
+
+$denuncias = json_decode(file_get_contents($arquivoDenuncias), true);
+if (!is_array($denuncias)) {
+    $denuncias = [];
+}
+
+// Gerar ID
 $novoId = 1;
 foreach ($denuncias as $d) {
     if ($d['id'] >= $novoId) {
@@ -74,6 +69,7 @@ foreach ($denuncias as $d) {
     }
 }
 
+// Mapear motivos
 $motivosTexto = [
     'spam' => 'Spam ou Publicidade',
     'discurso_odio' => 'Discurso de Ódio',
@@ -95,12 +91,15 @@ $novaDenuncia = [
     'motivo' => $motivo,
     'motivo_texto' => $motivosTexto[$motivo],
     'data' => time(),
-    'status' => 'pendente', // pendente, analisada, resolvida
-    'expira_em' => time() + (7 * 24 * 60 * 60) // 7 dias
+    'status' => 'pendente',
+    'expira_em' => time() + (7 * 24 * 60 * 60)
 ];
 
 $denuncias[] = $novaDenuncia;
-
 file_put_contents($arquivoDenuncias, json_encode($denuncias, JSON_PRETTY_PRINT));
-echo json_encode(['success' => true, 'message' => 'Denúncia enviada com sucesso']);
-?>
+
+echo json_encode([
+    'success' => true,
+    'message' => 'Denúncia enviada com sucesso',
+    'timestamp' => time()
+]);
