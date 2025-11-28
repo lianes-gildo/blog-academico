@@ -1,8 +1,5 @@
-// ========================================
-// 6. backend/api/check_denuncias_updates.php
-// Verifica novas denúncias (para admin)
-// ========================================
 <?php
+// Verifica se há novas denúncias (para admin)
 session_start();
 header('Content-Type: application/json');
 

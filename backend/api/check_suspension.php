@@ -1,8 +1,5 @@
-// ========================================
-// 8. backend/api/check_suspension.php
-// Verifica se usuário foi suspenso (real-time)
-// ========================================
 <?php
+// Verifica suspensão E FORÇA LOGOUT
 session_start();
 header('Content-Type: application/json');
 
@@ -54,14 +51,16 @@ if ($suspenso) {
         }
     }
     
-    // Destruir sessão
+    // Destruir sessão IMEDIATAMENTE
+    $_SESSION = [];
     session_destroy();
     
     echo json_encode([
         'suspended' => true,
         'until' => $suspensaoAte,
         'admin_nome' => $adminNome,
-        'message' => "A tua conta foi suspendida pelo Admin $adminNome até " . date('d/m/Y H:i', strtotime($suspensaoAte)) . ". Para mais informações contacte lndigitalcraft@gmail.com"
+        'message' => "A tua conta foi suspensa pelo Admin $adminNome até " . date('d/m/Y H:i', strtotime($suspensaoAte)) . ". Para mais informações contacte lndigitalcraft@gmail.com",
+        'force_logout' => true
     ]);
 } else {
     echo json_encode(['suspended' => false]);

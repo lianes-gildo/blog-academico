@@ -68,21 +68,6 @@
         "resolvida_por": "Lianes Nhacula"
     },
     {
-        "id": 5,
-        "comentario_id": 10,
-        "artigo_id": 5,
-        "comentario_texto": "ola",
-        "comentario_autor": "Teste",
-        "comentario_autor_id": null,
-        "denunciante_id": 7,
-        "denunciante_nome": "Chiquinho",
-        "motivo": "spam",
-        "motivo_texto": "Spam ou Publicidade",
-        "data": 1764270799,
-        "status": "pendente",
-        "expira_em": 1764875599
-    },
-    {
         "id": 6,
         "comentario_id": 24,
         "artigo_id": 5,
@@ -99,5 +84,56 @@
         "resolvida_em": 1764270844,
         "resolvida_por": "Lianes Nhacula",
         "acao_tomada": "Coment\u00e1rio removido"
+    },
+    {
+        "id": 5,
+        "comentario_id": 10,
+        "artigo_id": 5,
+        "comentario_texto": "ola",
+        "comentario_autor": "Teste",
+        "comentario_autor_id": null,
+        "denunciante_id": 7,
+        "denunciante_nome": "Chiquinho",
+        "motivo": "spam",
+        "motivo_texto": "Spam ou Publicidade",
+        "data": 1764270799,
+        "status": "resolvida",
+        "expira_em": 1764875599,
+        "resolvida_em": 1764273403,
+        "resolvida_por": "Lianes Nhacula",
+        "acao_tomada": "Den\u00fancia arquivada"
+    },
+    {
+        "id": 7,
+        "comentario_id": 35,
+        "artigo_id": 5,
+        "comentario_texto": "@Chiquinho sempre",
+        "comentario_autor": "Lianes Nhacula",
+        "comentario_autor_id": 4,
+        "denunciante_id": 7,
+        "denunciante_nome": "Chiquinho",
+        "motivo": "informacao_falsa",
+        "motivo_texto": "Informa\u00e7\u00e3o Falsa",
+        "data": 1764273431,
+        "status": "pendente",
+        "expira_em": 1764878231
+    },
+    {
+        "id": 8,
+        "comentario_id": 38,
+        "artigo_id": 6,
+        "comentario_texto": "@Lupin Tudo bem?",
+        "comentario_autor": "Lianes Nhacula",
+        "comentario_autor_id": 4,
+        "denunciante_id": 5,
+        "denunciante_nome": "Lupin",
+        "motivo": "discurso_odio",
+        "motivo_texto": "Discurso de \u00d3dio",
+        "data": 1764307616,
+        "status": "resolvida",
+        "expira_em": 1764912416,
+        "resolvida_em": 1764307651,
+        "resolvida_por": "Lianes Nhacula",
+        "acao_tomada": "Den\u00fancia arquivada"
     }
 ]

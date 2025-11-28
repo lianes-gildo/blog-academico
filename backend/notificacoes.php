@@ -10,27 +10,12 @@ if (!usuarioLogado()) {
 $usuarioId = $_SESSION['usuario_id'];
 
 // Obter notificações
-$arquivoNotif = '../data/notificacoes.json';
-$todasNotificacoes = [];
-$naoLidas = [];
+require_once 'criar_notificacao.php';
+$todasNotificacoes = obterNotificacoesUsuario($usuarioId);
+$naoLidas = obterNotificacoesUsuario($usuarioId, true);
 
-if (file_exists($arquivoNotif)) {
-    $notificacoes = json_decode(file_get_contents($arquivoNotif), true);
-    if (is_array($notificacoes)) {
-        foreach ($notificacoes as $n) {
-            if ($n['usuario_destino_id'] == $usuarioId) {
-                $todasNotificacoes[] = $n;
-                if (!isset($n['lida']) || $n['lida'] === false) {
-                    $naoLidas[] = $n;
-                }
-            }
-        }
-    }
-}
-
-usort($todasNotificacoes, function($a, $b) {
-    return $b['data'] - $a['data'];
-});
+$totalNotificacoes = count($todasNotificacoes);
+$totalNaoLidas = count($naoLidas);
 ?>
 
 <style>
@@ -75,39 +60,6 @@ usort($todasNotificacoes, function($a, $b) {
         padding: 40px;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
         animation: slideInUp 0.6s ease;
-    }
-    
-    .search-box {
-        flex: 1;
-        min-width: 250px;
-        max-width: 500px;
-        position: relative;
-    }
-    
-    .search-box input {
-        width: 100%;
-        padding: 15px 50px 15px 20px;
-        border: 2px solid #e0e0e0;
-        border-radius: 50px;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        background: #f8f9fa;
-    }
-    
-    .search-box input:focus {
-        border-color: var(--primary-orange);
-        outline: none;
-        box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
-        background: white;
-    }
-    
-    .search-icon {
-        position: absolute;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #888;
-        font-size: 1.3rem;
     }
     
     .btn-mark-all {
@@ -169,6 +121,7 @@ usort($todasNotificacoes, function($a, $b) {
     .icon-like { background: linear-gradient(135deg, #fa709a, #fee140); }
     .icon-dislike { background: linear-gradient(135deg, #ff6b6b, #ee5a6f); }
     .icon-reply { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .icon-denuncia { background: linear-gradient(135deg, #e74c3c, #c0392b); }
     
     .empty-state {
         text-align: center;
@@ -190,8 +143,8 @@ usort($todasNotificacoes, function($a, $b) {
     <div class="container">
         <h1 class="notifications-title">🔔 Central de Notificações</h1>
         <div class="notifications-stats">
-            <span class="stat-badge">📬 Total: <span id="total-count"><?php echo count($todasNotificacoes); ?></span></span>
-            <span class="stat-badge">✨ Não Lidas: <span id="unread-count"><?php echo count($naoLidas); ?></span></span>
+            <span class="stat-badge">📬 Total: <span id="total-count"><?php echo $totalNotificacoes; ?></span></span>
+            <span class="stat-badge">✨ Não Lidas: <span id="unread-count"><?php echo $totalNaoLidas; ?></span></span>
         </div>
     </div>
 </div>
@@ -199,12 +152,7 @@ usort($todasNotificacoes, function($a, $b) {
 <main class="container pb-5">
     <div class="notifications-container">
         <div class="notifications-actions" style="display: flex; justify-content: space-between; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="🔍 Pesquisar notificações..." autocomplete="off">
-                <i class="bi bi-search search-icon"></i>
-            </div>
-            
-            <?php if (count($naoLidas) > 0): ?>
+            <?php if ($totalNaoLidas > 0): ?>
                 <button onclick="marcarTodasLidas()" class="btn-mark-all" id="btnMarkAll">
                     <i class="bi bi-check-all"></i> 
                     <span>Marcar Todas como Lidas</span>
@@ -246,6 +194,11 @@ usort($todasNotificacoes, function($a, $b) {
                             $texto = "<strong>{$notif['usuario_origem_nome']}</strong> respondeu ao seu comentário";
                             $classe = 'icon-reply';
                             break;
+                        case 'denuncia_resolvida':
+                            $icone = '🚨';
+                            $texto = "Sua denúncia foi resolvida pelo Administrador <strong>{$notif['usuario_origem_nome']}</strong>.";
+                            $classe = 'icon-denuncia';
+                            break;
                     }
                     
                     $diferenca = time() - $notif['data'];
@@ -261,10 +214,13 @@ usort($todasNotificacoes, function($a, $b) {
                         $dias = floor($diferenca / 86400);
                         $tempoDecorrido = "Há {$dias} " . ($dias == 1 ? 'dia' : 'dias');
                     }
+                    
+                    $isUnread = !isset($notif['lida']) || $notif['lida'] === false;
                 ?>
-                    <div class="notification-item <?php echo !$notif['lida'] ? 'unread' : ''; ?>" 
+                    <div class="notification-item <?php echo $isUnread ? 'unread' : ''; ?>" 
                          data-notif-id="<?php echo $notif['id']; ?>"
-                         onclick="abrirNotificacao(<?php echo $notif['id']; ?>, <?php echo $notif['post_id']; ?>, <?php echo $notif['comentario_id']; ?>, <?php echo !$notif['lida'] ? 'true' : 'false'; ?>)">
+                         data-read="<?php echo $isUnread ? 'false' : 'true'; ?>"
+                         onclick="abrirNotificacao(<?php echo $notif['id']; ?>, <?php echo $notif['post_id']; ?>, <?php echo $notif['comentario_id']; ?>, <?php echo $isUnread ? 'true' : 'false'; ?>)">
                         <div class="notification-icon <?php echo $classe; ?>"><?php echo $icone; ?></div>
                         <div class="notification-content">
                             <p class="notification-text" style="font-size: 1.05rem; margin-bottom: 10px;"><?php echo $texto; ?></p>
@@ -283,9 +239,13 @@ usort($todasNotificacoes, function($a, $b) {
 </main>
 
 <script>
-// Marcar todas as notificações como lidas (SEM RECARREGAR)
+let lastNotificationCheck = Math.floor(Date.now() / 1000);
+
+// ==========================================
+// MARCAR TODAS AS NOTIFICAÇÕES COMO LIDAS
+// ==========================================
 function marcarTodasLidas() {
-    fetch('../backend/api/mark_notifications.php', {
+    fetch('api/mark_notifications.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'action=mark_all'
@@ -296,6 +256,7 @@ function marcarTodasLidas() {
             // Remover classe unread de todas
             document.querySelectorAll('.notification-item.unread').forEach(item => {
                 item.classList.remove('unread');
+                item.setAttribute('data-read', 'true');
             });
             
             // Atualizar contadores
@@ -303,41 +264,102 @@ function marcarTodasLidas() {
             
             // Esconder botão
             const btn = document.getElementById('btnMarkAll');
-            if (btn) btn.style.display = 'none';
+            if (btn) {
+                btn.style.display = 'none';
+            }
             
-            // Atualizar badges do header
-            const mobileBadge = document.getElementById('mobile-badge');
-            const desktopBadge = document.getElementById('desktop-badge');
-            if (mobileBadge) mobileBadge.style.display = 'none';
-            if (desktopBadge) desktopBadge.style.display = 'none';
+            // Atualizar badges do header (sino)
+            atualizarBadgeSino(0);
         }
     });
 }
 
-// Marcar uma notificação como lida e abrir
+// ==========================================
+// MARCAR UMA NOTIFICAÇÃO COMO LIDA E ABRIR
+// ==========================================
 function abrirNotificacao(notifId, postId, comentarioId, isUnread) {
     if (isUnread) {
-        fetch('../backend/api/mark_notifications.php', {
+        fetch('api/mark_notifications.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'action=mark_one&notif_id=' + notifId
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                // Atualizar UI imediatamente
+                const item = document.querySelector(`[data-notif-id="${notifId}"]`);
+                if (item) {
+                    item.classList.remove('unread');
+                    item.setAttribute('data-read', 'true');
+                }
+                
+                // Atualizar contador
+                const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+                document.getElementById('unread-count').textContent = unreadCount;
+                
+                // Atualizar sino
+                atualizarBadgeSino(unreadCount);
+                
+                // Esconder botão se não houver mais não lidas
+                if (unreadCount === 0) {
+                    const btn = document.getElementById('btnMarkAll');
+                    if (btn) btn.style.display = 'none';
+                }
+            }
         });
     }
     
+    // Redirecionar para o comentário
     window.location.href = '../artigo.php?id=' + postId + '#comment-' + comentarioId;
 }
 
-// Pesquisa
-const searchInput = document.getElementById('searchInput');
-if (searchInput) {
-    searchInput.addEventListener('input', function() {
-        const term = this.value.toLowerCase();
-        document.querySelectorAll('.notification-item').forEach(item => {
-            const text = item.textContent.toLowerCase();
-            item.style.display = text.includes(term) ? 'flex' : 'none';
-        });
+// ==========================================
+// ATUALIZAR BADGE DO SINO (HEADER)
+// ==========================================
+function atualizarBadgeSino(count) {
+    const badges = document.querySelectorAll('.notification-badge');
+    badges.forEach(badge => {
+        if (count > 0) {
+            badge.textContent = count > 99 ? '99+' : count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
     });
 }
+
+// ==========================================
+// REAL-TIME: VERIFICAR NOVAS NOTIFICAÇÕES
+// ==========================================
+function verificarNovasNotificacoes() {
+    fetch('api/check_notifications_count.php')
+    .then(r => r.json())
+    .then(data => {
+        const count = data.count;
+        
+        // Atualizar contador na página
+        document.getElementById('unread-count').textContent = count;
+        
+        // Atualizar sino
+        atualizarBadgeSino(count);
+        
+        // Mostrar/esconder botão
+        const btn = document.getElementById('btnMarkAll');
+        if (btn) {
+            btn.style.display = count > 0 ? 'flex' : 'none';
+        }
+    })
+    .catch(err => console.error('Erro ao verificar notificações:', err));
+}
+
+// Verificar notificações a cada 3 segundos
+setInterval(verificarNovasNotificacoes, 3000);
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Sistema de notificações real-time iniciado');
+});
 </script>
 
 <?php require '../includes/footer.php'; ?>

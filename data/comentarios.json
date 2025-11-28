@@ -264,5 +264,106 @@
         "data": 1764271246,
         "likes": [],
         "dislikes": []
+    },
+    {
+        "comentario_id": 32,
+        "artigo_id": 5,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "Boaaaaa",
+        "data": 1764273013,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 33,
+        "artigo_id": 5,
+        "nome": "Lianes Nhacula",
+        "usuario_id": 4,
+        "comentario": "olaaa",
+        "data": 1764273273,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 34,
+        "artigo_id": 5,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "@Lianes Nhacula boaaa",
+        "data": 1764273286,
+        "pai_id": 33,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 35,
+        "artigo_id": 5,
+        "nome": "Lianes Nhacula",
+        "usuario_id": 4,
+        "comentario": "@Chiquinho sempre",
+        "data": 1764273303,
+        "pai_id": 34,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 36,
+        "artigo_id": 9,
+        "nome": "Chiquinho",
+        "usuario_id": 7,
+        "comentario": "olaaaaaaa @LianesNhacula",
+        "data": 1764273581,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 37,
+        "artigo_id": 6,
+        "nome": "Lupin",
+        "usuario_id": 5,
+        "comentario": "ola",
+        "data": 1764307384,
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 38,
+        "artigo_id": 6,
+        "nome": "Lianes Nhacula",
+        "usuario_id": 4,
+        "comentario": "@Lupin Tudo bem?",
+        "data": 1764307398,
+        "pai_id": 37,
+        "likes": [
+            5
+        ],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 39,
+        "artigo_id": 6,
+        "nome": "Lupin",
+        "usuario_id": 5,
+        "comentario": "@Lianes Nhacula Bem e vc admin?",
+        "data": 1764308857,
+        "pai_id": 38,
+        "likes": [
+            4
+        ],
+        "dislikes": []
+    },
+    {
+        "comentario_id": 40,
+        "artigo_id": 6,
+        "nome": "Lianes Nhacula",
+        "usuario_id": 4,
+        "comentario": "@Lupin Tambem estou bem!",
+        "data": 1764308918,
+        "pai_id": 39,
+        "likes": [
+            4
+        ],
+        "dislikes": []
     }
 ]

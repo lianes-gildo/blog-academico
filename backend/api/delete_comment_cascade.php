@@ -1,8 +1,5 @@
-// ========================================
-// 3. backend/api/delete_comment_cascade.php
-// Apaga comentário e todas respostas (cascata)
-// ========================================
 <?php
+// Apaga comentário e todas as respostas em cascata
 session_start();
 header('Content-Type: application/json');
 

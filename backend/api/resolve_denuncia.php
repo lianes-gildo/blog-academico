@@ -1,8 +1,5 @@
-// ========================================
-// 5. backend/api/resolve_denuncia.php
-// Resolve uma denúncia (apaga ou arquiva)
-// ========================================
 <?php
+// Resolve uma denúncia (apaga ou arquiva)
 session_start();
 header('Content-Type: application/json');
 
@@ -54,45 +51,44 @@ if ($deleteComment) {
     if (file_exists($arquivoComentarios)) {
         $comentarios = json_decode(file_get_contents($arquivoComentarios), true);
         if (is_array($comentarios)) {
-            $comentarios = array_filter($comentarios, function($c) use ($comentarioId) {
-                return $c['comentario_id'] != $comentarioId;
+            // Função para coletar IDs em cascata
+            function coletarIdsCascata($comentarioId, $comentarios) {
+                $ids = [$comentarioId];
+                $encontrou = true;
+                
+                while ($encontrou) {
+                    $encontrou = false;
+                    foreach ($comentarios as $c) {
+                        if (isset($c['pai_id']) && in_array($c['pai_id'], $ids) && !in_array($c['comentario_id'], $ids)) {
+                            $ids[] = $c['comentario_id'];
+                            $encontrou = true;
+                        }
+                    }
+                }
+                
+                return $ids;
+            }
+            
+            $idsParaApagar = coletarIdsCascata($comentarioId, $comentarios);
+            
+            $comentarios = array_filter($comentarios, function($c) use ($idsParaApagar) {
+                return !in_array($c['comentario_id'], $idsParaApagar);
             });
             file_put_contents($arquivoComentarios, json_encode(array_values($comentarios), JSON_PRETTY_PRINT));
         }
     }
 }
 
-// Marcar como resolvida e mover para o final
+// Marcar como resolvida
 $denuncias[$denunciaIndex]['status'] = 'resolvida';
 $denuncias[$denunciaIndex]['resolvida_em'] = time();
 $denuncias[$denunciaIndex]['resolvida_por'] = $_SESSION['nome'];
 $denuncias[$denunciaIndex]['acao_tomada'] = $deleteComment ? 'Comentário removido' : 'Denúncia arquivada';
 
-// Mover para final
-$denunciaResolvida = $denuncias[$denunciaIndex];
-unset($denuncias[$denunciaIndex]);
-$denuncias = array_values($denuncias);
-$denuncias[] = $denunciaResolvida;
-
 file_put_contents($arquivoDenuncias, json_encode($denuncias, JSON_PRETTY_PRINT));
 
 // Criar notificação para denunciante
-$arquivoNotif = __DIR__ . '/../../data/notificacoes.json';
-if (!file_exists($arquivoNotif)) {
-    file_put_contents($arquivoNotif, '[]');
-}
-
-$notificacoes = json_decode(file_get_contents($arquivoNotif), true);
-if (!is_array($notificacoes)) {
-    $notificacoes = [];
-}
-
-$novoId = 1;
-foreach ($notificacoes as $n) {
-    if ($n['id'] >= $novoId) {
-        $novoId = $n['id'] + 1;
-    }
-}
+require_once __DIR__ . '/../criar_notificacao.php';
 
 // Obter título do post
 $posts = json_decode(file_get_contents(__DIR__ . '/../../data/posts.json'), true);
@@ -104,23 +100,14 @@ foreach ($posts as $p) {
     }
 }
 
-$notificacoes[] = [
-    'id' => $novoId,
-    'tipo' => 'denuncia_resolvida',
-    'usuario_destino_id' => $denuncia['denunciante_id'],
-    'usuario_origem_nome' => $_SESSION['nome'],
-    'comentario_id' => $comentarioId,
-    'post_id' => $denuncia['artigo_id'],
-    'post_titulo' => $postTitulo,
-    'data' => time(),
-    'lida' => false,
-    'acao_tomada' => $deleteComment ? 'Comentário removido' : 'Denúncia arquivada',
-    'denuncia_motivo' => $denuncia['motivo_texto'],
-    'comentario_autor' => $denuncia['comentario_autor'],
-    'data_denuncia' => $denuncia['data']
-];
-
-file_put_contents($arquivoNotif, json_encode($notificacoes, JSON_PRETTY_PRINT));
+criarNotificacao(
+    'denuncia_resolvida',
+    $denuncia['denunciante_id'],
+    $_SESSION['nome'],
+    $comentarioId,
+    $denuncia['artigo_id'],
+    $postTitulo
+);
 
 $acao = $deleteComment ? 'Comentário apagado e denúncia resolvida' : 'Denúncia marcada como resolvida';
 

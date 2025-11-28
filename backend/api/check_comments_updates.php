@@ -1,8 +1,5 @@
-// ========================================
-// 1. backend/api/check_comments_updates.php
-// Verifica se há novos comentários
-// ========================================
 <?php
+// Verifica se há novos comentários desde a última verificação
 session_start();
 header('Content-Type: application/json');
 

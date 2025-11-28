@@ -301,7 +301,7 @@ $totalResolvidas = count($resolvidas ?? []);
                             Denunciante: <strong><?php echo htmlspecialchars($denuncia['denunciante_nome']); ?></strong>
                         </span>
                         <span>
-                            <i class="bi bi-calendar-fill"></i> 
+                        <i class="bi bi-calendar-fill"></i> 
                             <?php echo date('d/m/Y H:i', $denuncia['data']); ?>
                         </span>
                     </div>
@@ -335,10 +335,15 @@ $totalResolvidas = count($resolvidas ?? []);
 </main>
 
 <script>
+// ==========================================
+// VARIÁVEIS GLOBAIS
+// ==========================================
 let filtroAtual = 'todas';
 let lastCheckDenuncias = Math.floor(Date.now() / 1000);
 
-// Resolver denúncia com real-time
+// ==========================================
+// RESOLVER DENÚNCIA (Real-Time com API)
+// ==========================================
 function resolverDenuncia(denunciaId, comentarioId, apagarComentario) {
     const acao = apagarComentario ? 'apagar o comentário e resolver' : 'marcar como resolvida';
     
@@ -400,7 +405,6 @@ function resolverDenuncia(denunciaId, comentarioId, apagarComentario) {
             // Atualizar contadores
             atualizarContadores();
             
-            // Não mostrar alert, apenas console
             console.log('✅', data.message);
             
         } else {
@@ -425,7 +429,9 @@ function resolverDenuncia(denunciaId, comentarioId, apagarComentario) {
     });
 }
 
-// Filtrar denúncias
+// ==========================================
+// FILTRAR DENÚNCIAS
+// ==========================================
 function filtrarDenuncias(filtro) {
     filtroAtual = filtro;
     
@@ -472,7 +478,9 @@ function filtrarDenuncias(filtro) {
     }
 }
 
-// Atualizar contadores
+// ==========================================
+// ATUALIZAR CONTADORES
+// ==========================================
 function atualizarContadores() {
     const cards = document.querySelectorAll('.denuncia-card');
     let total = cards.length;
@@ -496,7 +504,9 @@ function atualizarContadores() {
     document.getElementById('tab-count-resolvidas').textContent = resolvidas;
 }
 
-// Verificar novas denúncias (real-time)
+// ==========================================
+// REAL-TIME: VERIFICAR NOVAS DENÚNCIAS
+// ==========================================
 function verificarNovasDenuncias() {
     fetch(`api/check_denuncias_updates.php?last_check=${lastCheckDenuncias}`)
     .then(r => r.json())
@@ -510,7 +520,9 @@ function verificarNovasDenuncias() {
     .catch(err => console.error('Erro ao verificar denúncias:', err));
 }
 
-// Inicialização
+// ==========================================
+// INICIALIZAÇÃO
+// ==========================================
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Painel de denúncias real-time iniciado');
     

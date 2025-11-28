@@ -615,3 +615,51 @@ if (usuarioLogado()) {
             </div>
         </div>
     </nav>
+
+<?php if (usuarioLogado()): ?>
+<script>
+// Verificar suspensão a cada 5 segundos
+function verificarSuspensaoGlobal() {
+    fetch('<?php echo getBasePath(); ?>backend/api/check_suspension.php')
+    .then(r => r.json())
+    .then(data => {
+        if (data.suspended && data.force_logout) {
+            // Mostrar alerta e forçar logout
+            alert('🚫 ' + data.message);
+            window.location.href = '<?php echo getBasePath(); ?>backend/logout.php';
+        }
+    })
+    .catch(err => console.error('Erro ao verificar suspensão:', err));
+}
+
+setInterval(verificarSuspensaoGlobal, 5000);
+console.log('✅ Verificação de suspensão ativa (5s)');
+</script>
+<?php endif; ?>
+
+<?php if (usuarioLogado()): ?>
+<script>
+// Real-Time para atualizar badge de notificações no sino
+function atualizarBadgeHeader() {
+    fetch('<?php echo getBasePath(); ?>backend/api/check_notifications_count.php')
+    .then(r => r.json())
+    .then(data => {
+        const count = data.count;
+        const badges = document.querySelectorAll('.notification-badge');
+        
+        badges.forEach(badge => {
+            if (count > 0) {
+                badge.textContent = count > 99 ? '99+' : count;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        });
+    })
+    .catch(err => console.error('Erro ao atualizar notificações:', err));
+}
+
+// Verificar notificações a cada 3 segundos
+setInterval(atualizarBadgeHeader, 3000);
+</script>
+<?php endif; ?>

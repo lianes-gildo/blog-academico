@@ -319,16 +319,43 @@ function confirmarAlteracaoPapel(userId, novoPapel, nomeUsuario) {
 
 function confirmarSuspensao(userId, nomeUsuario) {
     const select = document.getElementById('duracao-' + userId);
-    const duracao = select.options[select.selectedIndex].text;
+    const duracao = select.value;
+    const duracaoTexto = select.options[select.selectedIndex].text;
     
     const mensagem = `🚫 SUSPENDER USUÁRIO\n\n` +
                      `Tem certeza que deseja suspender:\n\n` +
                      `📌 Usuário: ${nomeUsuario}\n` +
-                     `⏰ Duração: ${duracao}\n\n` +
+                     `⏰ Duração: ${duracaoTexto}\n\n` +
                      `O usuário não poderá acessar o sistema durante este período.`;
     
     if (confirm(mensagem)) {
-        document.getElementById('form-suspender-' + userId).submit();
+        // Usar API para suspensão real-time
+        const btn = event.target;
+        btn.disabled = true;
+        btn.textContent = '⏳ Suspendendo...';
+        
+        fetch('api/suspend_user.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `user_id=${userId}&duracao=${encodeURIComponent(duracao)}`
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                alert('✅ ' + data.message);
+                location.reload();
+            } else {
+                alert('❌ ' + data.message);
+                btn.disabled = false;
+                btn.textContent = '🚫 Suspender';
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('❌ Erro ao suspender usuário');
+            btn.disabled = false;
+            btn.textContent = '🚫 Suspender';
+        });
     }
 }
 

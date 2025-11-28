@@ -1,8 +1,5 @@
-// ========================================
-// 4. backend/api/report_comment.php
-// Denuncia um comentário
-// ========================================
 <?php
+// Denuncia um comentário
 session_start();
 header('Content-Type: application/json');
 
@@ -92,7 +89,7 @@ $novaDenuncia = [
     'motivo_texto' => $motivosTexto[$motivo],
     'data' => time(),
     'status' => 'pendente',
-    'expira_em' => time() + (7 * 24 * 60 * 60)
+    'expira_em' => time() + (7 * 24 * 60 * 60) // 7 dias
 ];
 
 $denuncias[] = $novaDenuncia;

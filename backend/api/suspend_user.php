@@ -1,8 +1,5 @@
-// ========================================
-// 7. backend/api/suspend_user.php
-// Suspende um usuário
-// ========================================
 <?php
+// Suspende um usuário E ENVIA NOTIFICAÇÃO
 session_start();
 header('Content-Type: application/json');
 
@@ -71,6 +68,45 @@ $suspensoes[] = [
 ];
 
 file_put_contents($arquivoSuspensoes, json_encode($suspensoes, JSON_PRETTY_PRINT));
+
+// ==========================================
+// CRIAR NOTIFICAÇÃO DE SUSPENSÃO
+// ==========================================
+require_once __DIR__ . '/../criar_notificacao.php';
+
+$arquivoNotif = __DIR__ . '/../../data/notificacoes.json';
+if (!file_exists($arquivoNotif)) {
+    file_put_contents($arquivoNotif, '[]');
+}
+
+$notificacoes = json_decode(file_get_contents($arquivoNotif), true);
+if (!is_array($notificacoes)) {
+    $notificacoes = [];
+}
+
+// Gerar ID único
+$novoId = 1;
+foreach ($notificacoes as $n) {
+    if (isset($n['id']) && $n['id'] >= $novoId) {
+        $novoId = $n['id'] + 1;
+    }
+}
+
+$notificacoes[] = [
+    'id' => $novoId,
+    'tipo' => 'suspensao',
+    'usuario_destino_id' => $userId,
+    'usuario_origem_nome' => $_SESSION['nome'],
+    'comentario_id' => 0,
+    'post_id' => 0,
+    'post_titulo' => 'Suspensão de Conta',
+    'data' => time(),
+    'lida' => false,
+    'suspenso_ate' => $dataExpiracao,
+    'suspenso_por' => $_SESSION['nome']
+];
+
+file_put_contents($arquivoNotif, json_encode($notificacoes, JSON_PRETTY_PRINT));
 
 echo json_encode([
     'success' => true,

@@ -46,7 +46,7 @@ function criarNotificacao($tipo, $usuarioDestinoId, $usuarioOrigemNome, $comenta
     // Criar nova notificação
     $novaNotificacao = [
         'id' => $novoId,
-        'tipo' => $tipo, // 'mention', 'like', 'dislike', 'reply'
+        'tipo' => $tipo, // 'mention', 'like', 'dislike', 'reply', 'denuncia_resolvida'
         'usuario_destino_id' => $usuarioDestinoId,
         'usuario_origem_nome' => $usuarioOrigemNome,
         'comentario_id' => $comentarioId,
@@ -177,36 +177,7 @@ function marcarTodasComoLidas($usuarioId) {
 }
 
 /**
- * Apagar notificação
- */
-function apagarNotificacao($notifId) {
-    $arquivoNotif = __DIR__ . '/../data/notificacoes.json';
-    
-    if (!file_exists($arquivoNotif)) {
-        return false;
-    }
-    
-    $notificacoes = json_decode(file_get_contents($arquivoNotif), true);
-    
-    if (!is_array($notificacoes)) {
-        return false;
-    }
-    
-    // Filtrar removendo a notificação
-    $novasNotificacoes = array_filter($notificacoes, function($n) use ($notifId) {
-        return !isset($n['id']) || $n['id'] != $notifId;
-    });
-    
-    // Reindexar array
-    $novasNotificacoes = array_values($novasNotificacoes);
-    
-    file_put_contents($arquivoNotif, json_encode($novasNotificacoes, JSON_PRETTY_PRINT));
-    
-    return true;
-}
-
-/**
- * Apagar notificações antigas (mais de 30 dias)
+ * Limpar notificações antigas (mais de 30 dias)
  */
 function limparNotificacoesAntigas() {
     $arquivoNotif = __DIR__ . '/../data/notificacoes.json';
@@ -235,4 +206,3 @@ function limparNotificacoesAntigas() {
     
     return true;
 }
-?>

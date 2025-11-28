@@ -1,8 +1,5 @@
-// ========================================
-// 9. backend/api/check_notifications_count.php
-// Conta notificações não lidas (real-time)
-// ========================================
 <?php
+// Conta notificações não lidas (real-time)
 session_start();
 header('Content-Type: application/json');
 

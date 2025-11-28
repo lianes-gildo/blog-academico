@@ -1,8 +1,5 @@
-// ========================================
-// 2. backend/api/get_all_comments.php
-// Retorna todos os comentários de um post
-// ========================================
 <?php
+// Retorna todos os comentários de um post
 session_start();
 header('Content-Type: application/json');
 

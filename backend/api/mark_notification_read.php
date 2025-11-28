@@ -1,8 +1,5 @@
-// ========================================
-// 10. backend/api/mark_notification_read.php
-// Marca notificação como lida
-// ========================================
 <?php
+// Marca notificações como lidas
 session_start();
 header('Content-Type: application/json');
 

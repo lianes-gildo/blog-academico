@@ -370,7 +370,7 @@ if (usuarioLogado()) {
     .reply-to-info strong {
         color: var(--primary-orange);
     }
-    
+
     /* Modal de Denúncia */
     .modal-denuncia {
         display: none;
@@ -551,8 +551,6 @@ if (usuarioLogado()) {
         </div>
     </div>
 
-    <!-- CONTINUAÇÃO DO artigo.php -->
-    
     <div class="comments-section">
         <h3 class="comments-title">
             <i class="bi bi-chat-dots-fill"></i>
@@ -762,11 +760,16 @@ if (usuarioLogado()) {
 </div>
 
 <script>
-// Variáveis globais
+// ==========================================
+// VARIÁVEIS GLOBAIS E CONFIGURAÇÃO
+// ==========================================
 let comentarioParaDenunciar = null;
 let motivoSelecionado = null;
 let lastUpdateTimestamp = <?php echo time(); ?>;
 
+// ==========================================
+// GESTÃO DE MENUS
+// ==========================================
 // Fechar menu ao clicar fora
 document.addEventListener('click', function(e) {
     if (!e.target.closest('.comment-menu')) {
@@ -791,7 +794,9 @@ function toggleCommentMenu(comentarioId) {
     menu.classList.toggle('show');
 }
 
-// Curtir post
+// ==========================================
+// CURTIR POST
+// ==========================================
 function curtir(id) {
     <?php if (!usuarioLogado()): ?>
         alert("❤️ Faça login para curtir!");
@@ -814,7 +819,9 @@ function curtir(id) {
     });
 }
 
-// Enviar comentário
+// ==========================================
+// COMENTÁRIOS - ENVIO
+// ==========================================
 function enviarComentario(id) {
     const texto = document.getElementById('campo-comentario').value.trim();
     if (!texto) {
@@ -839,6 +846,9 @@ function enviarComentario(id) {
     });
 }
 
+// ==========================================
+// INTERAÇÕES COM COMENTÁRIOS
+// ==========================================
 // Like em comentário
 function likeComment(comentarioId) {
     fetch('backend/comentarios_interacao.php', {
@@ -875,6 +885,9 @@ function dislikeComment(comentarioId) {
     });
 }
 
+// ==========================================
+// RESPOSTAS A COMENTÁRIOS
+// ==========================================
 // Toggle resposta
 function toggleReply(comentarioId, nomeAutor) {
     const form = document.getElementById('reply-form-' + comentarioId);
@@ -921,9 +934,9 @@ function enviarResposta(comentarioId, nomeAutor) {
     });
 }
 
-// Continua na Parte 3...
-// CONTINUAÇÃO DO JAVASCRIPT DO artigo.php
-
+// ==========================================
+// APAGAR COMENTÁRIO
+// ==========================================
 // Confirmar apagar comentário
 function confirmarApagarComentario(comentarioId) {
     if (confirm('⚠️ Tem certeza que deseja apagar este comentário?\n\nTodas as respostas também serão apagadas.\n\nEsta ação não pode ser desfeita.')) {
@@ -931,9 +944,9 @@ function confirmarApagarComentario(comentarioId) {
     }
 }
 
-// Apagar comentário (Real-Time)
+// Apagar comentário (Real-Time com API)
 function apagarComentario(comentarioId) {
-    fetch('backend/api/delete_comment_realtime.php', {
+    fetch('backend/api/delete_comment_cascade.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'comentario_id=' + comentarioId
@@ -941,7 +954,7 @@ function apagarComentario(comentarioId) {
     .then(r => r.json())
     .then(data => {
         if (data.success) {
-            alert('✅ ' + data.message);
+            console.log('✅ ' + data.message);
             
             // Remover comentário da DOM imediatamente
             const comentarioElement = document.getElementById('comment-' + comentarioId);
@@ -978,6 +991,9 @@ function apagarComentario(comentarioId) {
     });
 }
 
+// ==========================================
+// DENÚNCIAS
+// ==========================================
 // Abrir modal de denúncia
 function abrirModalDenuncia(comentarioId) {
     comentarioParaDenunciar = comentarioId;
@@ -1004,7 +1020,13 @@ function fecharModalDenuncia() {
 // Selecionar motivo de denúncia
 function selecionarMotivo(motivo) {
     motivoSelecionado = motivo;
-    document.getElementById('motivo-' + (motivo === 'discurso_odio' ? 'odio' : motivo === 'conteudo_inapropriado' ? 'inapropriado' : motivo === 'informacao_falsa' ? 'falsa' : motivo)).checked = true;
+    const motivoMap = {
+        'discurso_odio': 'odio',
+        'conteudo_inapropriado': 'inapropriado',
+        'informacao_falsa': 'falsa'
+    };
+    const inputId = motivoMap[motivo] || motivo;
+    document.getElementById('motivo-' + inputId).checked = true;
     
     // Mostrar/esconder campo "outro"
     if (motivo === 'outro') {
@@ -1014,7 +1036,7 @@ function selecionarMotivo(motivo) {
     }
 }
 
-// Enviar denúncia
+// Enviar denúncia (usando API)
 function enviarDenuncia() {
     if (!motivoSelecionado) {
         alert('⚠️ Por favor, selecione um motivo para a denúncia');
@@ -1050,23 +1072,35 @@ function enviarDenuncia() {
     });
 }
 
-// Carregar comentários (Real-Time)
+// ==========================================
+// REAL-TIME: CARREGAR COMENTÁRIOS
+// ==========================================
 function carregarComentarios() {
     const postId = <?php echo $postId; ?>;
     
-    fetch('backend/api/get_comments.php?post_id=' + postId)
+    fetch('backend/api/get_all_comments.php?post_id=' + postId)
     .then(r => r.json())
     .then(data => {
-        if (data.comentarios && data.comentarios.length > 0) {
-            // Atualizar lista de comentários
+        if (data.success && data.comentarios && data.comentarios.length > 0) {
             renderizarComentarios(data.comentarios);
-            lastUpdateTimestamp = Math.floor(Date.now() / 1000);
+            lastUpdateTimestamp = data.timestamp;
+        } else if (data.success && data.total === 0) {
+            // Mostrar empty state se não houver comentários
+            const container = document.getElementById('lista-comentarios');
+            container.innerHTML = `
+                <div class="text-center py-5" id="empty-state">
+                    <div style="font-size: 3rem;">💬</div>
+                    <p class="text-muted mt-3">Seja o primeiro a comentar!</p>
+                </div>
+            `;
         }
     })
     .catch(err => console.error('Erro ao carregar comentários:', err));
 }
 
-// Renderizar comentários (com estrutura hierárquica)
+// ==========================================
+// RENDERIZAR COMENTÁRIOS (HIERÁRQUICO)
+// ==========================================
 function renderizarComentarios(comentarios) {
     const container = document.getElementById('lista-comentarios');
     
@@ -1159,14 +1193,14 @@ function renderizarComentario(comentario, nivel) {
                 <button onclick="dislikeComment(${comentario.comentario_id})" class="btn-comment-action ${userDisliked ? 'active' : ''}" id="dislike-btn-${comentario.comentario_id}">
                     <i class="bi bi-hand-thumbs-down-fill"></i> <span id="dislike-count-${comentario.comentario_id}">${dislikes}</span>
                 </button>
-                <button onclick="toggleReply(${comentario.comentario_id}, '${escapeHtml(comentario.nome).replace(/'/g, "\\'")}')" class="btn-comment-action">
+                <button onclick="toggleReply(${comentario.comentario_id}, '${escapeHtml(comentario.nome).replace(/'/g, "\\'")}', event)" class="btn-comment-action">
                     <i class="bi bi-reply-fill"></i> Responder
                 </button>
             </div>
             <div class="reply-form" id="reply-form-${comentario.comentario_id}" style="display: none;">
                 <div class="reply-to-info">Respondendo a <strong>@${escapeHtml(comentario.nome)}</strong></div>
                 <textarea class="form-control" id="reply-text-${comentario.comentario_id}" rows="2" placeholder="@${escapeHtml(comentario.nome)} Escreva sua resposta..."></textarea>
-                <button onclick="enviarResposta(${comentario.comentario_id}, '${escapeHtml(comentario.nome).replace(/'/g, "\\'")}')" class="btn btn-sm btn-primary-custom mt-2">Enviar Resposta</button>
+                <button onclick="enviarResposta(${comentario.comentario_id}, '${escapeHtml(comentario.nome).replace(/'/g, "\\'")}', event)" class="btn btn-sm btn-primary-custom mt-2">Enviar Resposta</button>
             </div>
     `;
     <?php else: ?>
@@ -1193,7 +1227,9 @@ function renderizarComentario(comentario, nivel) {
     return html;
 }
 
-// Funções auxiliares
+// ==========================================
+// FUNÇÕES AUXILIARES
+// ==========================================
 function escapeHtml(text) {
     const map = {
         '&': '&amp;',
@@ -1220,21 +1256,27 @@ function formatarData(timestamp) {
     return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
-// Verificar atualizações (Real-Time Polling)
+// ==========================================
+// REAL-TIME: VERIFICAR ATUALIZAÇÕES
+// ==========================================
 function verificarAtualizacoes() {
     const postId = <?php echo $postId; ?>;
     
-    fetch(`backend/api/check_updates.php?post_id=${postId}&last_update=${lastUpdateTimestamp}`)
+    fetch(`backend/api/check_comments_updates.php?post_id=${postId}&last_check=${lastUpdateTimestamp}`)
     .then(r => r.json())
     .then(data => {
         if (data.hasUpdates) {
+            console.log('🔄 Novos comentários detectados');
             carregarComentarios();
         }
+        lastUpdateTimestamp = data.timestamp;
     })
     .catch(err => console.error('Erro ao verificar atualizações:', err));
 }
 
-// Verificar suspensão (para forçar logout)
+// ==========================================
+// VERIFICAR SUSPENSÃO (Real-Time)
+// ==========================================
 <?php if (usuarioLogado()): ?>
 function verificarSuspensao() {
     fetch('backend/api/check_suspension.php')
@@ -1242,7 +1284,7 @@ function verificarSuspensao() {
     .then(data => {
         if (data.suspended) {
             alert('🚫 ' + data.message + '\n\nVocê será redirecionado.');
-            window.location.href = 'index.php';
+            window.location.href = 'backend/logout.php';
         }
     })
     .catch(err => console.error('Erro ao verificar suspensão:', err));
@@ -1252,9 +1294,12 @@ function verificarSuspensao() {
 setInterval(verificarSuspensao, 10000);
 <?php endif; ?>
 
-// Verificar atualizações a cada 3 segundos
+// Verificar atualizações de comentários a cada 3 segundos
 setInterval(verificarAtualizacoes, 3000);
 
+// ==========================================
+// OUTRAS FUNÇÕES
+// ==========================================
 // Redirecionar para login
 function redirecionarLogin() {
     if (confirm('Você precisa fazer login para interagir. Deseja ir para a página de login?')) {
@@ -1275,10 +1320,56 @@ function compartilhar() {
     }
 }
 
-// Inicializar
+// ==========================================
+// INICIALIZAÇÃO
+// ==========================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Sistema Real-Time iniciado');
+    console.log('🚀 Sistema Real-Time de Comentários iniciado');
+    console.log('✅ Verificação automática: 3 segundos');
+    console.log('✅ Verificação de suspensão: 10 segundos');
 });
+
+// ==========================================
+// REAL-TIME: ATUALIZAR LIKES DO POST
+// ==========================================
+function atualizarLikesPost() {
+    const postId = <?php echo $postId; ?>;
+    
+    fetch('../backend/api/get_post_likes.php?post_id=' + postId)
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            const contador = document.getElementById('contador-gostos-' + postId);
+            if (contador) {
+                const oldValue = parseInt(contador.textContent);
+                const newValue = data.total;
+                
+                if (oldValue !== newValue) {
+                    contador.textContent = newValue;
+                    contador.style.animation = 'pulse 0.3s ease';
+                    setTimeout(() => {
+                        contador.style.animation = '';
+                    }, 300);
+                }
+            }
+        }
+    })
+    .catch(err => console.error('Erro ao atualizar likes:', err));
+}
+
+// Verificar likes do post a cada 3 segundos
+setInterval(atualizarLikesPost, 3000);
+
+// Adicionar animação CSS
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+    }
+`;
+document.head.appendChild(style);
+
 </script>
 
 <?php require 'includes/footer.php'; ?>
