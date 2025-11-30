@@ -119,7 +119,7 @@
                     </div>
                     <div class="col-md-6 text-center text-md-end">
                         <p class="mb-0">
-                            Desenvolvido com por 
+                            Desenvolvido por 
                             <strong>Lianes Gildo Nhacula</strong>
                         </p>
                     </div>
