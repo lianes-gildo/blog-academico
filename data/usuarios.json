@@ -16,7 +16,8 @@
         "senha": "$2y$10$LUAw6HvZgKEIz7pBvSeQjOzJlFTt2AyVopIhUSWyW5wxgloZyexCu",
         "papel": "editor",
         "imagem": "assets\/img\/users\/user_5_1763853585.jpg",
-        "status": "ativo"
+        "status": "ativo",
+        "suspenso_ate": "2025-11-29 17:53:34"
     },
     {
         "id": 6,

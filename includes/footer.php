@@ -84,7 +84,7 @@
                             <h5 class="footer-title">🌐 Conecte-se</h5>
                             <p class="footer-contact mb-3">
                                 <i class="bi bi-envelope-fill"></i>
-                                <a href="mailto:lndigitalcraft@gmail.com">lndigitalcraft@gmail.com</a>
+                                <a href="mailto:coreone@gmail.com">coreone@gmail.com</a>
                             </p>
                             <p class="footer-contact mb-4">
                                 <i class="bi bi-geo-alt-fill"></i>

@@ -365,5 +365,16 @@
             4
         ],
         "dislikes": []
+    },
+    {
+        "comentario_id": 41,
+        "artigo_id": 9,
+        "nome": "Lupin",
+        "usuario_id": 5,
+        "comentario": "@Lianes Nhacula wowwww",
+        "data": 1764328816,
+        "pai_id": 2,
+        "likes": [],
+        "dislikes": []
     }
 ]

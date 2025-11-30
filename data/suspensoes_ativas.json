@@ -5,5 +5,12 @@
         "suspenso_ate": "2025-11-29 05:43:37",
         "duracao": "1 day",
         "suspenso_por": "Lianes Nhacula"
+    },
+    {
+        "usuario_id": 5,
+        "suspenso_em": 1764352414,
+        "suspenso_ate": "2025-11-29 17:53:34",
+        "duracao": "1 day",
+        "suspenso_por": "Lianes Nhacula"
     }
 ]

@@ -390,5 +390,29 @@
         "post_titulo": "Pl\u00e1gio Acad\u00eamico: O que \u00e9 e Como Evitar",
         "data": 1764309119,
         "lida": false
+    },
+    {
+        "id": 35,
+        "tipo": "reply",
+        "usuario_destino_id": 4,
+        "usuario_origem_nome": "Lupin",
+        "comentario_id": 2,
+        "post_id": 9,
+        "post_titulo": "Como Montar um Portf\u00f3lio Acad\u00eamico Profissional",
+        "data": 1764328816,
+        "lida": false
+    },
+    {
+        "id": 36,
+        "tipo": "suspensao",
+        "usuario_destino_id": 5,
+        "usuario_origem_nome": "Lianes Nhacula",
+        "comentario_id": 0,
+        "post_id": 0,
+        "post_titulo": "Suspens\u00e3o de Conta",
+        "data": 1764352414,
+        "lida": false,
+        "suspenso_ate": "2025-11-29 17:53:34",
+        "suspenso_por": "Lianes Nhacula"
     }
 ]
