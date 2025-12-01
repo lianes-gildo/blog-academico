@@ -99,7 +99,7 @@ if (usuarioLogado()) {
         .navbar-custom {
             background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
             box-shadow: var(--shadow);
-            padding: 1rem 0;
+            padding: 0.8rem 0;
             position: fixed;
             top: 0;
             width: 100%;
@@ -107,25 +107,28 @@ if (usuarioLogado()) {
         }
         
         .navbar-logo {
-            width: 45px;
-            height: 45px;
+            width: 35px;
+            height: 35px;
             object-fit: contain;
             transition: transform 0.3s ease;
         }
         
-        .navbar-brand:hover .navbar-logo {
-            transform: rotate(360deg);
-        }
-        
         .navbar-brand {
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: white !important;
             transition: transform 0.3s ease;
+            white-space: nowrap;
+            padding: 0;
+            margin-right: auto;
         }
         
         .navbar-brand:hover {
             transform: scale(1.05);
+        }
+        
+        .navbar-brand:hover .navbar-logo {
+            transform: scale(1.1);
         }
         
         .nav-link {
@@ -189,12 +192,12 @@ if (usuarioLogado()) {
             box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
         }
         
-        /* Notificações Badge - MOBILE FORA DO MENU */
+        /* Notificações Badge */
         .notifications-bell {
             position: relative;
             color: white;
-            font-size: 1.4rem;
-            padding: 8px 12px;
+            font-size: 1.3rem;
+            padding: 8px;
             border-radius: 50%;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -203,8 +206,9 @@ if (usuarioLogado()) {
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
+            margin-right: 12px;
         }
         
         .notifications-bell:hover {
@@ -231,16 +235,16 @@ if (usuarioLogado()) {
             background: linear-gradient(135deg, #ff3b30, #ff6b6b);
             color: white;
             border-radius: 50%;
-            min-width: 22px;
-            height: 22px;
+            min-width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 800;
-            border: 3px solid var(--primary-blue);
+            border: 2px solid var(--primary-blue);
             animation: pulse 2s infinite;
-            padding: 0 5px;
+            padding: 0 4px;
             box-shadow: 0 2px 8px rgba(255, 59, 48, 0.6);
         }
         
@@ -258,18 +262,18 @@ if (usuarioLogado()) {
         
         /* User Dropdown */
         .user-profile-img {
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--primary-orange);
+            border: 2px solid var(--primary-orange);
             cursor: pointer;
             transition: all 0.3s ease;
         }
         
         .user-profile-img:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255, 107, 53, 0.6);
+            box-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
         }
         
         .dropdown-menu {
@@ -298,13 +302,13 @@ if (usuarioLogado()) {
         /* Hamburger Menu Animado */
         .navbar-toggler {
             border: none;
-            padding: 5px;
-            width: 45px;
-            height: 45px;
+            padding: 0;
+            width: 40px;
+            height: 40px;
             position: relative;
             cursor: pointer;
             background: rgba(255, 255, 255, 0.1) !important;
-            border-radius: 10px;
+            border-radius: 8px;
             transition: all 0.3s ease;
         }
         
@@ -317,8 +321,8 @@ if (usuarioLogado()) {
         }
         
         .hamburger {
-            width: 30px;
-            height: 20px;
+            width: 24px;
+            height: 18px;
             position: relative;
             transform: rotate(0deg);
             transition: .5s ease-in-out;
@@ -330,7 +334,7 @@ if (usuarioLogado()) {
         .hamburger span {
             display: block;
             position: absolute;
-            height: 3px;
+            height: 2px;
             width: 100%;
             background: white;
             border-radius: 3px;
@@ -379,16 +383,37 @@ if (usuarioLogado()) {
             display: none;
         }
         
+        /* Header Controls Flex */
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
         /* Mobile Adjustments */
         @media (max-width: 991px) {
             body {
-                padding-top: 70px;
+                padding-top: 65px;
+            }
+            
+            .navbar-custom {
+                padding: 0.6rem 0;
+            }
+            
+            .navbar-brand {
+                font-size: 1.1rem;
+            }
+            
+            .navbar-logo {
+                width: 32px;
+                height: 32px;
             }
             
             /* Sino aparece no mobile */
             .mobile-notifications {
-                display: block;
-                margin-right: 10px;
+                display: flex;
+                margin: 0;
             }
             
             /* Sino some no desktop dentro do menu */
@@ -398,7 +423,7 @@ if (usuarioLogado()) {
             
             .navbar-collapse {
                 background: var(--primary-blue);
-                margin-top: 15px;
+                margin-top: 12px;
                 padding: 20px;
                 border-radius: 15px;
                 animation: slideDown 0.3s ease;
@@ -441,16 +466,17 @@ if (usuarioLogado()) {
             }
             
             .user-info-mobile img {
-                width: 50px;
-                height: 50px;
+                width: 45px;
+                height: 45px;
                 border-radius: 50%;
                 margin-right: 15px;
-                border: 3px solid var(--primary-orange);
+                border: 2px solid var(--primary-orange);
             }
             
             .user-info-mobile span {
                 color: white;
                 font-weight: 600;
+                font-size: 0.95rem;
             }
         }
         
@@ -469,6 +495,29 @@ if (usuarioLogado()) {
                 display: none;
             }
         }
+        
+        /* Ajustes para telas muito pequenas */
+        @media (max-width: 360px) {
+            .navbar-brand {
+                font-size: 1rem;
+            }
+            
+            .navbar-logo {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .notifications-bell {
+                width: 36px;
+                height: 36px;
+                font-size: 1.1rem;
+            }
+            
+            .navbar-toggler {
+                width: 36px;
+                height: 36px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -479,13 +528,13 @@ if (usuarioLogado()) {
                 Blog Acadêmico
             </a>
             
-            <div class="d-flex align-items-center d-lg-none">
+            <div class="header-controls">
                 <?php if (usuarioLogado()): ?>
                     <!-- Sino FORA do menu hamburguer (Mobile) -->
                     <a href="<?php echo getBasePath(); ?>backend/notificacoes.php" class="notifications-bell mobile-notifications" title="Notificações">
                         <i class="bi bi-bell-fill"></i>
                         <?php if ($notificacoesNaoLidas > 0): ?>
-                            <span class="notification-badge"><?php echo $notificacoesNaoLidas > 99 ? '99+' : $notificacoesNaoLidas; ?></span>
+                            <span class="notification-badge" id="badge-mobile"><?php echo $notificacoesNaoLidas > 99 ? '99+' : $notificacoesNaoLidas; ?></span>
                         <?php endif; ?>
                     </a>
                 <?php endif; ?>
@@ -520,7 +569,7 @@ if (usuarioLogado()) {
                         <a href="<?php echo getBasePath(); ?>backend/notificacoes.php" class="notifications-bell d-none d-lg-flex" title="Notificações">
                             <i class="bi bi-bell-fill"></i>
                             <?php if ($notificacoesNaoLidas > 0): ?>
-                                <span class="notification-badge"><?php echo $notificacoesNaoLidas > 99 ? '99+' : $notificacoesNaoLidas; ?></span>
+                                <span class="notification-badge" id="badge-desktop"><?php echo $notificacoesNaoLidas > 99 ? '99+' : $notificacoesNaoLidas; ?></span>
                             <?php endif; ?>
                         </a>
                         
@@ -541,7 +590,7 @@ if (usuarioLogado()) {
                                     <a class="dropdown-item" href="<?php echo getBasePath(); ?>backend/notificacoes.php">
                                         <i class="bi bi-bell-fill"></i> Notificações
                                         <?php if ($notificacoesNaoLidas > 0): ?>
-                                            <span class="badge bg-danger ms-2"><?php echo $notificacoesNaoLidas; ?></span>
+                                            <span class="badge bg-danger ms-2" id="badge-dropdown"><?php echo $notificacoesNaoLidas; ?></span>
                                         <?php endif; ?>
                                     </a>
                                 </li>
@@ -584,7 +633,7 @@ if (usuarioLogado()) {
                             <a class="nav-link" href="<?php echo getBasePath(); ?>backend/notificacoes.php">
                                 <i class="bi bi-bell-fill"></i> Notificações
                                 <?php if ($notificacoesNaoLidas > 0): ?>
-                                    <span class="badge bg-danger ms-2"><?php echo $notificacoesNaoLidas; ?></span>
+                                    <span class="badge bg-danger ms-2" id="badge-mobile-menu"><?php echo $notificacoesNaoLidas; ?></span>
                                 <?php endif; ?>
                             </a>
                             <?php if (ehAdmin()): ?>
@@ -624,7 +673,6 @@ function verificarSuspensaoGlobal() {
     .then(r => r.json())
     .then(data => {
         if (data.suspended && data.force_logout) {
-            // Mostrar alerta e forçar logout
             alert('🚫 ' + data.message);
             window.location.href = '<?php echo getBasePath(); ?>backend/logout.php';
         }
@@ -639,27 +687,64 @@ console.log('✅ Verificação de suspensão ativa (5s)');
 
 <?php if (usuarioLogado()): ?>
 <script>
-// Real-Time para atualizar badge de notificações no sino
-function atualizarBadgeHeader() {
+// Real-Time para atualizar TODOS os badges de notificações
+function atualizarBadgesNotificacoes() {
     fetch('<?php echo getBasePath(); ?>backend/api/check_notifications_count.php')
     .then(r => r.json())
     .then(data => {
         const count = data.count;
-        const badges = document.querySelectorAll('.notification-badge');
         
-        badges.forEach(badge => {
+        // Atualizar badge do sino mobile (fora do menu)
+        const badgeMobile = document.getElementById('badge-mobile');
+        if (badgeMobile) {
             if (count > 0) {
-                badge.textContent = count > 99 ? '99+' : count;
-                badge.style.display = 'flex';
+                badgeMobile.textContent = count > 99 ? '99+' : count;
+                badgeMobile.style.display = 'flex';
             } else {
-                badge.style.display = 'none';
+                badgeMobile.style.display = 'none';
             }
-        });
+        }
+        
+        // Atualizar badge do sino desktop
+        const badgeDesktop = document.getElementById('badge-desktop');
+        if (badgeDesktop) {
+            if (count > 0) {
+                badgeDesktop.textContent = count > 99 ? '99+' : count;
+                badgeDesktop.style.display = 'flex';
+            } else {
+                badgeDesktop.style.display = 'none';
+            }
+        }
+        
+        // Atualizar badge do dropdown (Desktop)
+        const badgeDropdown = document.getElementById('badge-dropdown');
+        if (badgeDropdown) {
+            if (count > 0) {
+                badgeDropdown.textContent = count;
+                badgeDropdown.style.display = 'inline-block';
+            } else {
+                badgeDropdown.style.display = 'none';
+            }
+        }
+        
+        // Atualizar badge do menu mobile (dentro do hamburguer)
+        const badgeMobileMenu = document.getElementById('badge-mobile-menu');
+        if (badgeMobileMenu) {
+            if (count > 0) {
+                badgeMobileMenu.textContent = count;
+                badgeMobileMenu.style.display = 'inline-block';
+            } else {
+                badgeMobileMenu.style.display = 'none';
+            }
+        }
     })
     .catch(err => console.error('Erro ao atualizar notificações:', err));
 }
 
-// Verificar notificações a cada 3 segundos
-setInterval(atualizarBadgeHeader, 3000);
+// Atualizar a cada 3 segundos
+setInterval(atualizarBadgesNotificacoes, 3000);
+
+// Atualizar imediatamente ao carregar
+document.addEventListener('DOMContentLoaded', atualizarBadgesNotificacoes);
 </script>
 <?php endif; ?>
